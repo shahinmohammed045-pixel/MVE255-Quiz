@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MVE455 / TMA976 — Del A Quiz · Flervariabelanalys & PDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f2ea;
+    --paper-2: #ece6d8;
+    --ink: #1a1814;
+    --ink-2: #3d3933;
+    --ink-3: #6b665c;
+    --rule: #d6cfbe;
+    --accent: #7a2226;          /* deep burgundy */
+    --accent-2: #b8443f;
+    --green: #2f5d3a;
+    --red: #8a2520;
+    --shadow: 0 1px 0 rgba(26,24,20,.04), 0 12px 28px -16px rgba(26,24,20,.18);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: 'Crimson Pro', 'Iowan Old Style', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(122,34,38,.04) 0, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(47,93,58,.04) 0, transparent 45%);
+    min-height: 100vh;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HEADER */
+  header.masthead {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h1.title {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 5.5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  h1.title em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .lede {
+    font-size: 19px;
+    color: var(--ink-2);
+    max-width: 64ch;
+    margin: 0;
+  }
+
+  /* MODE PICKER */
+  .modes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 32px 0 24px;
+  }
+  .mode {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all .15s ease;
+    text-align: left;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .mode:hover { border-color: var(--ink-2); transform: translateY(-1px); }
+  .mode.active {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(122,34,38,.04), transparent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .mode-name {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .mode-name .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .mode-desc {
+    font-size: 15px;
+    color: var(--ink-3);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px;
+  }
+  .btn {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 9px 16px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .12s ease;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+  .btn-small { padding: 7px 12px; font-size: 12px; }
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    color: var(--ink-2);
+    cursor: pointer;
+    user-select: none;
+  }
+  .toggle input { display: none; }
+  .toggle .track {
+    width: 32px; height: 18px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    position: relative;
+    transition: all .15s ease;
+  }
+  .toggle .track::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px;
+    width: 14px; height: 14px;
+    background: var(--ink-3);
+    border-radius: 50%;
+    transition: all .15s ease;
+  }
+  .toggle input:checked + .track {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .toggle input:checked + .track::after {
+    left: 15px;
+    background: var(--paper);
+  }
+  .toggle-state {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .spacer { flex: 1; }
+
+  /* CATEGORY FILTER */
+  details.cat-filter {
+    margin-bottom: 24px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--paper);
+    overflow: hidden;
+  }
+  details.cat-filter > summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  details.cat-filter > summary::-webkit-details-marker { display: none; }
+  details.cat-filter > summary::after { content: '▾'; color: var(--ink-3); transition: transform .15s ease; }
+  details.cat-filter[open] > summary::after { transform: rotate(180deg); }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 6px;
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--rule);
+  }
+  .cat-chip {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    text-align: left;
+    transition: all .1s ease;
+  }
+  .cat-chip:hover { border-color: var(--ink-3); }
+  .cat-chip.on {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .cat-actions { padding: 8px 16px; border-top: 1px solid var(--rule); display: flex; gap: 8px; }
+
+  /* CARD */
+  .card-wrap {
+    position: relative;
+  }
+  .progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+  .progress .counter { font-weight: 500; }
+  .progress .stats span { color: var(--ink-2); }
+  .progress .stats .right { color: var(--green); }
+  .progress .stats .wrong { color: var(--red); }
+  .progress-bar {
+    height: 2px;
+    background: var(--paper-2);
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .progress-bar > .fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0;
+    transition: width .25s ease;
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 40px 44px;
+    min-height: 340px;
+    box-shadow: var(--shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .card .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--rule);
+    margin-bottom: 24px;
+  }
+  .badge {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.05em;
+  }
+  .q-label, .a-label {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .q {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(22px, 3vw, 28px);
+    line-height: 1.35;
+    color: var(--ink);
+    font-weight: 400;
+    margin: 0 0 28px;
+  }
+  .q .math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92em;
+    background: var(--paper-2);
+    padding: 1px 6px;
+    border-radius: 2px;
+    color: var(--ink);
+  }
+  .answer-zone {
+    border-top: 1px dashed var(--rule);
+    padding-top: 22px;
+    min-height: 80px;
+    flex: 1;
+  }
+  .a {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: clamp(22px, 3vw, 28px);
+    line-height: 1.35;
+    color: var(--accent);
+    font-weight: 500;
+    margin: 0;
+  }
+  .a:not(.shown) { display: none; }
+  .a .math {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 0.92em;
+    background: rgba(122,34,38,.07);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+  .reveal-btn-wrap { padding-top: 18px; }
+
+  /* CARD ACTIONS */
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .action {
+    flex: 1;
+    min-width: 110px;
+    padding: 12px 14px;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    transition: all .12s ease;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  .action .kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    border: 1px solid var(--rule);
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: var(--paper-2);
+  }
+  .action.reveal { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .action.reveal:hover { background: var(--accent); border-color: var(--accent); }
+  .action.reveal .kbd { color: var(--paper); border-color: rgba(246,242,234,.3); background: rgba(0,0,0,.2); }
+  .action.right:hover { background: var(--green); color: var(--paper); border-color: var(--green); }
+  .action.wrong:hover { background: var(--red); color: var(--paper); border-color: var(--red); }
+  .action.right:hover .kbd, .action.wrong:hover .kbd { color: var(--paper); border-color: rgba(246,242,234,.3); background: rgba(0,0,0,.2); }
+  .action.skip:hover { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+  .action.skip:hover .kbd { color: var(--paper); border-color: rgba(246,242,234,.3); background: rgba(0,0,0,.2); }
+
+  /* FINISHED */
+  .finished {
+    text-align: center;
+    padding: 60px 30px;
+  }
+  .finished h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 36px;
+    font-weight: 500;
+    margin: 0 0 12px;
+  }
+  .finished .score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: var(--ink-3);
+    margin-bottom: 28px;
+  }
+  .finished .score .num { color: var(--accent); font-size: 22px; font-weight: 500; }
+
+  /* HOTKEYS BAR */
+  .hotkeys {
+    margin-top: 22px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+  .hotkeys .k {
+    color: var(--ink-2);
+    font-weight: 500;
+    background: var(--paper-2);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin: 0 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 12px;
+    color: var(--ink-3);
+    text-align: center;
+    line-height: 1.6;
+  }
+  footer .src { font-family: 'JetBrains Mono', monospace; color: var(--ink-2); }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    .card { padding: 28px 24px; }
+    .container { padding: 24px 16px 60px; }
+    .action { min-width: 0; padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="masthead">
+    <div class="eyebrow">Chalmers · Flervariabelanalys & PDE</div>
+    <h1 class="title">Lär dig <em>teorin</em> till tentan.</h1>
+    <p class="lede">Teori-flashcards i fakta-fråga-format — exakt den stilen Logg använder på <strong>Del A</strong>. Hela formelhäftet täckt: topologi, derivata, integralsatser, vektorkalkyl, FEM och PDE.</p>
+  </header>
+
+  <section class="modes" id="modes"></section>
+
+  <div class="controls">
+    <button class="btn" id="startBtn">Starta quiz</button>
+    <label class="toggle">
+      <input type="checkbox" id="shuffleToggle" checked>
+      <span class="track"></span>
+      <span>Slumpa ordning:</span>
+      <span class="toggle-state" id="shuffleState">PÅ</span>
+    </label>
+    <label class="toggle">
+      <input type="checkbox" id="repeatWrong" checked>
+      <span class="track"></span>
+      <span>Upprepa fel:</span>
+      <span class="toggle-state" id="repeatState">PÅ</span>
+    </label>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost btn-small" id="resetBtn">Nollställ historik</button>
+  </div>
+
+  <details class="cat-filter" id="catFilter">
+    <summary>
+      <span>Filtrera kategorier <span id="catSummary" style="color: var(--ink-3); margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px;"></span></span>
+    </summary>
+    <div class="cat-grid" id="catGrid"></div>
+    <div class="cat-actions">
+      <button class="btn btn-ghost btn-small" id="catAll">Markera alla</button>
+      <button class="btn btn-ghost btn-small" id="catNone">Avmarkera alla</button>
+    </div>
+  </details>
+
+  <div class="card-wrap" id="cardWrap" hidden>
+    <div class="progress">
+      <span class="counter"><span id="curIdx">1</span> / <span id="totalIdx">0</span></span>
+      <span class="stats">
+        <span class="right"><span id="rightCount">0</span> rätt</span>
+        <span> · </span>
+        <span class="wrong"><span id="wrongCount">0</span> fel</span>
+      </span>
+    </div>
+    <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+
+    <div class="card" id="card">
+      <div class="meta">
+        <span class="badge" id="cardCat">—</span>
+        <span class="source" id="cardSrc">—</span>
+      </div>
+      <div class="q-label">Fråga</div>
+      <p class="q" id="qText"></p>
+      <div class="answer-zone">
+        <div class="a-label">Svar</div>
+        <p class="a" id="aText"></p>
+      </div>
+    </div>
+
+    <div class="card-actions" id="actionsHidden">
+      <button class="action reveal" id="revealBtn">Visa svar <span class="kbd">Space</span></button>
+      <button class="action skip" id="skipBtn">Hoppa över <span class="kbd">S</span></button>
+    </div>
+
+    <div class="card-actions" id="actionsShown" hidden>
+      <button class="action right" id="rightBtn">Rätt <span class="kbd">R</span></button>
+      <button class="action wrong" id="wrongBtn">Fel <span class="kbd">F</span></button>
+      <button class="action skip" id="nextBtn">Nästa <span class="kbd">N</span></button>
+    </div>
+
+    <div class="hotkeys">
+      <span class="k">Space</span> visa svar &nbsp;·&nbsp; <span class="k">R</span> rätt &nbsp;·&nbsp; <span class="k">F</span> fel &nbsp;·&nbsp; <span class="k">N</span> nästa &nbsp;·&nbsp; <span class="k">S</span> hoppa över
+    </div>
+  </div>
+
+  <div class="card-wrap" id="finishedWrap" hidden>
+    <div class="card finished">
+      <h2>Klart!</h2>
+      <div class="score">Du fick <span class="num" id="finalRight">0</span> rätt av <span id="finalTotal">0</span> möjliga.</div>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" id="restartBtn">Starta om</button>
+        <button class="btn btn-ghost" id="backHomeBtn">Tillbaka</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Byggd för MVE455 / TMA976-stilen efter Anders Loggs format. <br>
+    <span class="src">Källa: Shahins formelhäfte + Loggs IV.8.1-repetition + Flervariabel-anteckningar.</span><br>
+    <span class="src">⌨ Kortkommandon: Space · R · F · N · S</span>
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================
+   FLASHCARD DATA — fakta-fråga format à la Logg Del A
+   Alla kort utgår från Shahins formelhäfte + lecture notes.
+   Format: { c: kategori, q: fråga (HTML), a: svar (HTML), s: källsida }
+   ============================================================ */
+const CARDS = [
+
+  /* ─── TOPOLOGI I ℝⁿ ─────────────────────────────────────── */
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en boll <span class='math'>B<sub>δ</sub>(x)</span> med radie <span class='math'>δ &gt; 0</span> och centrum i <span class='math'>x</span>?", a: "Omgivning till punkten <span class='math'>x</span>", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd där varje punkt har en omgivning som ligger helt i mängden?", a: "Öppen mängd", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd vars komplement är öppet?", a: "Sluten mängd", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd <span class='math'>X ⊆ ℝⁿ</span> om det finns <span class='math'>R &gt; 0</span> så att <span class='math'>X ⊆ B<sub>R</sub>(0)</span>?", a: "Begränsad mängd", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd som är sluten och begränsad?", a: "Kompakt mängd", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en punkt i mängden som har en omgivning som ligger helt i mängden?", a: "Inre punkt", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en punkt som har en omgivning som ligger helt utanför mängden?", a: "Yttre punkt", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en punkt som varken är inre eller yttre?", a: "Randpunkt", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas mängden av alla randpunkter till X, betecknad <span class='math'>∂X</span>?", a: "Randen", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas mängden <span class='math'>X°</span> = mängden exklusive dess rand?", a: "Det inre", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas mängden <span class='math'>X̄</span> = mängden inklusive dess rand?", a: "Det slutna höljet", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en följd som uppfyller <span class='math'>∀ε&gt;0 ∃K: k,l ≥ K ⇒ ‖x(k) − x(l)‖ &lt; ε</span>?", a: "Cauchy-följd", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en följd som uppfyller <span class='math'>∀ε&gt;0 ∃K: k ≥ K ⇒ ‖x(k) − x̄‖ &lt; ε</span>?", a: "Konvergent följd med gränsvärde <span class='math'>x̄</span>", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vilken egenskap har rummet <span class='math'>ℝⁿ</span> som garanterar att varje Cauchy-följd konvergerar?", a: "Fullständigt", s: "Avsnitt 1.1" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd där räta linjen mellan varje par av punkter ligger helt i mängden?", a: "Konvex mängd", s: "Diskretisering" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas den minsta konvexa mängd som innehåller X?", a: "Det konvexa höljet av X", s: "Diskretisering" },
+  { c: "Topologi i ℝⁿ", q: "Vad kallas en mängd där varje par av punkter kan sammanbindas med en kurva som ligger helt i mängden?", a: "Bågvis sammanhängande", s: "Gränsvärde & kontinuitet" },
+
+  /* ─── FUNKTIONER & GRÄNSVÄRDEN ──────────────────────────── */
+  { c: "Funktioner & gränsvärden", q: "Vad heter mängden <span class='math'>D(f) = X</span> av tillåtna argument?", a: "Definitionsmängd", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter mängden <span class='math'>Y</span> av möjliga värden?", a: "Målmängd", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter mängden <span class='math'>R(f) = {f(x) | x ∈ X}</span> av alla antagna värden?", a: "Värdemängd", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter en funktion <span class='math'>f: ℝ → ℝ³</span>?", a: "Vektorfunktion", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter en funktion <span class='math'>f: ℝⁿ → ℝ</span>?", a: "Skalärfält", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter en funktion <span class='math'>f: ℝ³ → ℝ³</span>?", a: "Vektorfält", s: "Avsnitt 1.2" },
+  { c: "Funktioner & gränsvärden", q: "Vad kallas <span class='math'>f</span> om <span class='math'>∀ε&gt;0 ∃δ&gt;0 ∀x ∈ D(f): 0 &lt; ‖x − x̄‖ &lt; δ ⇒ ‖f(x) − ȳ‖ &lt; ε</span>?", a: "Funktionen har gränsvärdet <span class='math'>ȳ</span> i <span class='math'>x̄</span>", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad kallas <span class='math'>f</span> om <span class='math'>lim<sub>x→x̄</sub> f(x) = f(x̄)</span>?", a: "Kontinuerlig i <span class='math'>x̄</span>", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad kallas <span class='math'>f</span> om <span class='math'>∀ε&gt;0 ∃δ&gt;0 ∀x,y ∈ X: ‖x − y‖ &lt; δ ⇒ ‖f(x) − f(y)‖ &lt; ε</span>?", a: "Likformigt kontinuerlig", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad kallas <span class='math'>f</span> om <span class='math'>∃L<sub>f</sub> &gt; 0 ∀x,y ∈ X: ‖f(x) − f(y)‖ ≤ L<sub>f</sub>‖x − y‖</span>?", a: "Lipschitz-kontinuerlig", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vilket samband gäller mellan Lipschitz-kontinuitet, likformig kontinuitet och kontinuitet?", a: "Lipschitz ⇒ likformig ⇒ kontinuerlig", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad kallas en funktion <span class='math'>g: X → X</span> som är Lipschitz med <span class='math'>L<sub>g</sub> &lt; 1</span>?", a: "Kontraktionsavbildning", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter satsen: Om <span class='math'>g: X → X</span> är en kontraktion på sluten icke-tom mängd, så har <span class='math'>g</span> en unik fixpunkt?", a: "Banachs fixpunktssats", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter satsen som säger att en kontinuerlig funktion på en bågvis sammanhängande mängd antar alla värden mellan <span class='math'>f(x)</span> och <span class='math'>f(y)</span>?", a: "Satsen om mellanliggande värden", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad heter satsen som säger att en kontinuerlig funktion på en kompakt mängd antar ett största och ett minsta värde?", a: "Extremvärdessatsen", s: "Avsnitt 1.3" },
+  { c: "Funktioner & gränsvärden", q: "Vad fås som gränsvärde av iterationen <span class='math'>x<sup>(k+1)</sup> = g(x<sup>(k)</sup>)</span> där <span class='math'>g</span> är en kontraktion?", a: "Fixpunkten <span class='math'>x̄ = g(x̄)</span>", s: "Banachs fixpunktssats" },
+
+  /* ─── DERIVATA & LINJÄRISERING ──────────────────────────── */
+  { c: "Derivata & linjärisering", q: "Vad kallas matrisen med element <span class='math'>∂f<sub>i</sub>/∂x<sub>j</sub></span>?", a: "Jacobi-matrisen", s: "Avsnitt 1.4" },
+  { c: "Derivata & linjärisering", q: "Vad kallas matrisen med element <span class='math'>∂²f/∂x<sub>i</sub>∂x<sub>j</sub></span>?", a: "Hesse-matrisen", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vad kallas gränsvärdet <span class='math'>lim<sub>h→0</sub> [f<sub>i</sub>(x + he<sub>j</sub>) − f<sub>i</sub>(x)]/h</span>?", a: "Partiell derivata <span class='math'>∂f<sub>i</sub>/∂x<sub>j</sub></span>", s: "Avsnitt 1.4" },
+  { c: "Derivata & linjärisering", q: "Vad kallas approximationen <span class='math'>f(x + h) ≈ f(x) + f'(x)h</span>?", a: "Linjärisering", s: "Avsnitt 1.4" },
+  { c: "Derivata & linjärisering", q: "Vad gäller om de partiella derivatorna är kontinuerliga?", a: "Funktionen är deriverbar (derivatan = Jacobi-matrisen)", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vilken egenskap har Hesse-matrisen om de blandade andraderivatorna är lika?", a: "Symmetrisk", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vad heter satsen <span class='math'>(f ∘ g)'(x) = f'(g(x)) · g'(x)</span>?", a: "Kedjeregeln", s: "Avsnitt 1.7" },
+  { c: "Derivata & linjärisering", q: "Vad heter regeln <span class='math'>(fg)' = gf' + fg'</span>?", a: "Leibniz regel (produktregeln)", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vad heter regeln <span class='math'>(f/g)' = (gf' − fg')/g²</span>?", a: "Kvotregeln", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vad heter satsen <span class='math'>f(b) − f(a) = f'(ξ)(b − a)</span>?", a: "Medelvärdessatsen", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Hur uttrycks Lipschitz-konstanten <span class='math'>L<sub>f</sub></span> av en deriverbar funktion?", a: "<span class='math'>L<sub>f</sub> = sup ‖f'‖<sub>F</sub></span> (Frobenius)", s: "Avsnitt 1.5" },
+  { c: "Derivata & linjärisering", q: "Vad heter satsen <span class='math'>f(x + h) = f(x) + f'(x)h + E<sub>1</sub></span> där <span class='math'>E<sub>1</sub> = ½h<sup>T</sup>f''(ξ)h</span>?", a: "Taylors sats av grad 1", s: "Avsnitt 1.6" },
+  { c: "Derivata & linjärisering", q: "Vad heter satsen <span class='math'>f(x + h) = f(x) + f'(x)h + ½h<sup>T</sup>f''(x)h + E<sub>2</sub></span>?", a: "Taylors sats av grad 2", s: "Avsnitt 1.6" },
+  { c: "Derivata & linjärisering", q: "Vad heter approximationen <span class='math'>∂f<sub>i</sub>/∂x<sub>j</sub> ≈ [f<sub>i</sub>(x + he<sub>j</sub>) − f<sub>i</sub>(x)]/h</span>?", a: "Ensidig numerisk derivata", s: "Avsnitt 1.6" },
+  { c: "Derivata & linjärisering", q: "Vad heter approximationen <span class='math'>∂f<sub>i</sub>/∂x<sub>j</sub> ≈ [f<sub>i</sub>(x + he<sub>j</sub>) − f<sub>i</sub>(x − he<sub>j</sub>)]/(2h)</span>?", a: "Symmetrisk numerisk derivata", s: "Avsnitt 1.6" },
+  { c: "Derivata & linjärisering", q: "Vad är optimal steglängd för ensidig numerisk derivata?", a: "<span class='math'>√ε<sub>mach</sub> ≈ 10⁻⁸</span>", s: "Numerisk derivata" },
+  { c: "Derivata & linjärisering", q: "Vad är optimal steglängd för symmetrisk numerisk derivata?", a: "<span class='math'>ε<sub>mach</sub><sup>1/3</sup> ≈ 10⁻⁵</span>", s: "Numerisk derivata" },
+  { c: "Derivata & linjärisering", q: "Vad kallas planet <span class='math'>z = f(x̄, ȳ) + ∂f/∂x(x − x̄) + ∂f/∂y(y − ȳ)</span>?", a: "Tangentplanet till ytan i <span class='math'>(x̄, ȳ)</span>", s: "Tangentplan" },
+  { c: "Derivata & linjärisering", q: "Vilken vektor är normalvektor till tangentplanet för <span class='math'>z = f(x,y)</span>?", a: "<span class='math'>N = (−f'<sub>x</sub>(x̄), −f'<sub>y</sub>(x̄), 1)</span>", s: "Tangentplan" },
+  { c: "Derivata & linjärisering", q: "Vad heter ekvationen <span class='math'>N · (r − r<sub>0</sub>) = 0</span> där N är normalvektorn?", a: "Planets ekvation (tangentplanet)", s: "Tangentplan" },
+
+  /* ─── GRADIENT & RIKTNINGSDERIVATA ──────────────────────── */
+  { c: "Gradient & riktningsderivata", q: "Vad kallas operatorn <span class='math'>∇ = (∂/∂x, ∂/∂y, ∂/∂z)</span>?", a: "Nabla-operatorn", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Vad kallas vektorn <span class='math'>∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z)</span>?", a: "Gradient", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Vad kallas <span class='math'>D<sub>û</sub> f(a) = d/dt [f(a + tû)]|<sub>t=0</sub></span>?", a: "Riktningsderivata", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Vad säger satsen <span class='math'>D<sub>û</sub> f(a) = ∇f(a) · û</span>?", a: "Riktningsderivatan är skalärprodukten av gradient och riktning", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Vilket är riktningsderivatans maximala värde?", a: "<span class='math'>‖∇f(a)‖</span> (i gradientens riktning)", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Vilket är riktningsderivatans minsta värde?", a: "<span class='math'>−‖∇f(a)‖</span> (i negativa gradientens riktning)", s: "Avsnitt 1.8" },
+  { c: "Gradient & riktningsderivata", q: "Mot vad är gradienten alltid ortogonal?", a: "Nivåkurvor (2D) eller nivåytor (3D)", s: "Avsnitt 1.8" },
+
+  /* ─── NEWTONS METOD ─────────────────────────────────────── */
+  { c: "Newtons metod", q: "Vad heter iterationen <span class='math'>x<sub>k+1</sub> = x<sub>k</sub> − (f'(x<sub>k</sub>))⁻¹ f(x<sub>k</sub>)</span>?", a: "Newtons metod", s: "Kapitel 2" },
+  { c: "Newtons metod", q: "Vilken konvergensordning har Newtons metod i närheten av en enkel rot?", a: "Kvadratisk", s: "Kapitel 2" },
+  { c: "Newtons metod", q: "Vad reduceras konvergensordningen till om <span class='math'>f'(x̄) = 0</span> (dubbelrot)?", a: "Linjär", s: "Kapitel 2" },
+  { c: "Newtons metod", q: "Vad kallas en variant där <span class='math'>f'</span> approximeras istället för att beräknas exakt?", a: "Kvasi-Newton-metoden", s: "Kapitel 2" },
+
+  /* ─── EXTREMVÄRDEN ──────────────────────────────────────── */
+  { c: "Extremvärden", q: "Vad kallas en punkt <span class='math'>x̄</span> där <span class='math'>∇f(x̄) = 0</span>?", a: "Stationär punkt", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad kallas en punkt där <span class='math'>∇f(x̄)</span> inte existerar?", a: "Singulär punkt", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad kallas en stationär punkt som inte är en lokal extrempunkt?", a: "Sadelpunkt", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad gäller om Hesse-matrisen <span class='math'>f''(x̄)</span> är positivt definit i en stationär punkt?", a: "<span class='math'>x̄</span> är strängt lokalt minimum", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad gäller om Hesse-matrisen <span class='math'>f''(x̄)</span> är negativt definit i en stationär punkt?", a: "<span class='math'>x̄</span> är strängt lokalt maximum", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad gäller om Hesse-matrisen <span class='math'>f''(x̄)</span> är indefinit i en stationär punkt?", a: "<span class='math'>x̄</span> är sadelpunkt", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vad är de nödvändiga villkoren för extremvärde i en inre punkt?", a: "Stationär eller singulär punkt", s: "Extremvärden" },
+  { c: "Extremvärden", q: "Vilka tre typer av punkter ska undersökas vid optimering på kompakt mängd?", a: "Inre stationära, inre singulära, randpunkter", s: "Optimering" },
+
+  /* ─── OPTIMERING & LAGRANGE ─────────────────────────────── */
+  { c: "Optimering med bivillkor", q: "Vad heter funktionen <span class='math'>L(x, λ) = f(x) + λ g(x)</span>?", a: "Lagrange-funktionen", s: "Optimering" },
+  { c: "Optimering med bivillkor", q: "Vad heter metoden där man söker stationära punkter till <span class='math'>L(x, λ)</span>?", a: "Lagranges multiplikatormetod", s: "Optimering" },
+  { c: "Optimering med bivillkor", q: "Vilket geometriskt villkor karakteriserar extremum med bivillkor?", a: "<span class='math'>∇f</span> och <span class='math'>∇g</span> är parallella (kolinjära)", s: "Optimering" },
+  { c: "Optimering med bivillkor", q: "Vad blir Lagrange-funktionen vid flera bivillkor <span class='math'>g<sub>1</sub>, …, g<sub>p</sub></span>?", a: "<span class='math'>L = f(x) + λ<sub>1</sub>g<sub>1</sub> + … + λ<sub>p</sub>g<sub>p</sub></span>", s: "Optimering" },
+  { c: "Optimering med bivillkor", q: "Vad heter iterationen <span class='math'>x<sub>k+1</sub> = x<sub>k</sub> − h<sub>k</sub> ∇f(x<sub>k</sub>)</span>?", a: "Gradientmetoden", s: "Optimering" },
+  { c: "Optimering med bivillkor", q: "Vad heter metoden som löser <span class='math'>A<sup>T</sup>Ax = A<sup>T</sup>b</span>?", a: "Minsta-kvadrat-metoden", s: "Optimering" },
+
+  /* ─── FUNKTIONSSATSER ───────────────────────────────────── */
+  { c: "Funktionssatser", q: "Vad heter satsen: Om <span class='math'>f'(x̄)</span> är inverterbar, så är <span class='math'>f</span> lokalt inverterbar med <span class='math'>(f⁻¹)'(ȳ) = (f'(x̄))⁻¹</span>?", a: "Inversa funktionssatsen", s: "Funktionssatser" },
+  { c: "Funktionssatser", q: "Vad heter satsen: <span class='math'>F(x, y) = 0</span> definierar implicit en funktion <span class='math'>x = g(y)</span> med <span class='math'>g'(ȳ) = −(F'<sub>x</sub>)⁻¹ F'<sub>y</sub></span>?", a: "Implicita funktionssatsen", s: "Funktionssatser" },
+
+  /* ─── INTEGRALER ────────────────────────────────────────── */
+  { c: "Integraler", q: "Vad heter satsen <span class='math'>∫∫<sub>R</sub> f dx dy = ∫<sub>a</sub><sup>b</sup>(∫<sub>c</sub><sup>d</sup> f dy)dx</span>?", a: "Fubinis sats", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter <span class='math'>dA = dx dy</span>?", a: "Areaelement", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter <span class='math'>dV = dx dy dz</span>?", a: "Volymelement", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter formeln <span class='math'>∫∫<sub>Ω</sub> f dA = ∫∫<sub>Ω̂</sub> (f ∘ g)|det g'| dÂ</span>?", a: "Variabelsubstitution i dubbelintegral", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad kallas <span class='math'>|det g'|</span> i variabelsubstitutionen?", a: "Jacobi-determinanten", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter formeln <span class='math'>∫∫ f(x)g(y) dx dy = ∫ f(x) dx · ∫ g(y) dy</span>?", a: "Separabel dubbelintegral", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter en integral över ett ej-kompakt område eller med obegränsad integrand?", a: "Generaliserad integral", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad kallas en sekvens <span class='math'>(Ω<sub>k</sub>)</span> som växer mot <span class='math'>Ω</span> och används för generaliserad integral?", a: "Uttömmande snitt", s: "Avsnitt 3" },
+  { c: "Integraler", q: "Vad heter olikheten <span class='math'>|∫<sub>Ω</sub> f dx| ≤ ∫<sub>Ω</sub> |f| dx</span>?", a: "Triangelolikheten för integraler", s: "Generaliserade integraler" },
+  { c: "Integraler", q: "För vilka α konvergerar <span class='math'>∫<sub>‖x‖&gt;1</sub> 1/‖x‖<sup>α</sup> dx</span> i ℝⁿ?", a: "<span class='math'>α &gt; n</span>", s: "Generaliserade integraler" },
+
+  /* ─── KOORDINATSYSTEM ───────────────────────────────────── */
+  { c: "Koordinatsystem", q: "Vad är Jacobi-determinanten för polära koordinater?", a: "<span class='math'>r</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är Jacobi-determinanten för cylindriska koordinater?", a: "<span class='math'>ρ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är Jacobi-determinanten för sfäriska koordinater?", a: "<span class='math'>r² sin θ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är areaelementet i polära koordinater?", a: "<span class='math'>dA = r dr dφ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är volymelementet i cylindriska koordinater?", a: "<span class='math'>dV = ρ dρ dφ dz</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är volymelementet i sfäriska koordinater?", a: "<span class='math'>dV = r² sin θ dr dθ dφ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vilka är variabelbytena för polära koordinater?", a: "<span class='math'>x = r cos φ, y = r sin φ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vilka är variabelbytena för cylindriska koordinater?", a: "<span class='math'>x = ρ cos φ, y = ρ sin φ, z = z</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vilka är variabelbytena för sfäriska koordinater?", a: "<span class='math'>x = r sin θ cos φ, y = r sin θ sin φ, z = r cos θ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad kallas vinkeln θ i sfäriska koordinater?", a: "Zenitvinkel (polär vinkel)", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad kallas vinkeln φ i sfäriska koordinater?", a: "Azimutvinkel", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är arean på en sfär med radie R med <span class='math'>dS</span>-element?", a: "<span class='math'>dS = R² sin θ dθ dφ</span>", s: "Koordinatsystem" },
+  { c: "Koordinatsystem", q: "Vad är formeln för Laplacianen i polära koordinater?", a: "<span class='math'>Δf = (1/r) ∂/∂r(r ∂f/∂r) + (1/r²) ∂²f/∂φ²</span>", s: "Koordinatsystem" },
+
+  /* ─── MEDELVÄRDEN & MOMENT ──────────────────────────────── */
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>f̄<sub>Ω</sub> = (1/|Ω|) ∫<sub>Ω</sub> f dx</span>?", a: "Medelvärde av f över Ω", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>f̄<sub>Ω,w</sub> = ∫ f w dx / ∫ w dx</span>?", a: "Viktat medelvärde", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>M = ∫<sub>Ω</sub> ϱ(x) dx</span>?", a: "Massa", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>x̄ = ∫<sub>Ω</sub> x ϱ(x) dx / ∫<sub>Ω</sub> ϱ dx</span>?", a: "Masscentrum", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>x̄ = ∫<sub>Ω</sub> x dx / |Ω|</span>?", a: "Centroid", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>I<sub>Ω</sub> = ∫<sub>Ω</sub> r² ϱ(x) dx</span>?", a: "Tröghetsmoment", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter satsen <span class='math'>I<sub>Ω</sub> = Ī<sub>Ω</sub> + M d²</span>?", a: "Steiners sats (parallellaxelsatsen)", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter satsen <span class='math'>∫<sub>Ω</sub> f dx = f(x̄) |Ω|</span> för någon <span class='math'>x̄ ∈ Ω</span>?", a: "Medelvärdessatsen för integraler", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter satsen <span class='math'>∫<sub>Ω</sub> f w dx = f(x̄) ∫<sub>Ω</sub> w dx</span>?", a: "Viktade medelvärdessatsen för integraler", s: "Medelvärden" },
+  { c: "Medelvärden & moment", q: "Vad heter <span class='math'>τ = (x − x̄) × F</span>?", a: "Vridmoment", s: "Medelvärden" },
+
+  /* ─── KURVOR ────────────────────────────────────────────── */
+  { c: "Kurvor", q: "Vad är definitionen av en kurva <span class='math'>C</span> i ℝⁿ?", a: "<span class='math'>C = {r(t) ∈ ℝⁿ | t ∈ [a,b]}</span>, r kontinuerlig", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas <span class='math'>t</span> i parametriseringen <span class='math'>r(t)</span>?", a: "Kurvans parameter", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas en kurva där <span class='math'>r(a) = r(b)</span>?", a: "Sluten kurva", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas en kurva som inte korsar sig själv (r är injektiv)?", a: "Enkel kurva", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas vektorn <span class='math'>T(t) = r'(t)</span>?", a: "Tangentvektor", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas <span class='math'>T̂(t) = r'(t)/‖r'(t)‖</span>?", a: "Enhetstangentvektor", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas en kurva som har en tangentvektor i varje punkt?", a: "Reguljär kurva", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad heter <span class='math'>v(t) = r'(t)</span>?", a: "Hastighet längs kurvan", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad heter <span class='math'>‖v(t)‖ = ‖r'(t)‖</span>?", a: "Fart", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad heter <span class='math'>a(t) = r''(t)</span>?", a: "Acceleration", s: "Kurvor" },
+  { c: "Kurvor", q: "Vad kallas linjen <span class='math'>L(t) = r<sub>0</sub> + r'(t<sub>0</sub>)(t − t<sub>0</sub>)</span>?", a: "Tangentlinjen till C i <span class='math'>r<sub>0</sub></span>", s: "Kurvor" },
+
+  /* ─── KURVINTEGRALER ────────────────────────────────────── */
+  { c: "Kurvintegraler", q: "Vad heter <span class='math'>∫<sub>C</sub> f ds = ∫<sub>a</sub><sup>b</sup> f(r(t))‖r'(t)‖ dt</span>?", a: "Kurvintegral av skalärfält", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad kallas <span class='math'>ds = ‖r'(t)‖ dt</span>?", a: "Båglängdselement", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad heter <span class='math'>|C| = ∫<sub>C</sub> ds = ∫<sub>a</sub><sup>b</sup> ‖r'(t)‖ dt</span>?", a: "Kurvlängd", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad heter <span class='math'>∫<sub>C</sub> F · dr = ∫<sub>a</sub><sup>b</sup> F(r(t)) · r'(t) dt</span>?", a: "Tangentkurvintegral", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad kallas <span class='math'>dr = r'(t) dt</span>?", a: "Vektorbåglängdselement", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad heter <span class='math'>W = ∫<sub>C</sub> F · dr</span> fysikaliskt?", a: "Arbete", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad heter <span class='math'>∮<sub>C</sub> F · dr</span> för en sluten kurva C?", a: "Cirkulation", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad kallas ett vektorfält där cirkulationen är noll runt varje sluten kurva?", a: "Konservativt vektorfält", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad kallas en funktion <span class='math'>ϕ</span> som uppfyller <span class='math'>F = ∇ϕ</span>?", a: "Skalär potential till F", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vad gäller för tangentkurvintegralen av ett konservativt fält?", a: "<span class='math'>∫<sub>C</sub> F · dr = ϕ(r(b)) − ϕ(r(a))</span> — oberoende av väg", s: "Kurvintegraler" },
+  { c: "Kurvintegraler", q: "Vilka tre påståenden är ekvivalenta för <span class='math'>F</span> i ett enkelt sammanhängande område?", a: "Konservativt ⇔ Har skalär potential ⇔ Rotationsfritt", s: "Integralsatser" },
+
+  /* ─── YTOR ──────────────────────────────────────────────── */
+  { c: "Ytor", q: "Vad är definitionen av en yta <span class='math'>S</span>?", a: "<span class='math'>S = {r(u,v) ∈ ℝⁿ | (u,v) ∈ Ŝ}</span>, r kontinuerlig", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas en yta som saknar rand?", a: "Sluten yta", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas en yta som inte korsar sig själv?", a: "Enkel yta", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas vektorn <span class='math'>N(u,v) = r'<sub>u</sub> × r'<sub>v</sub></span>?", a: "Normalvektor", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas <span class='math'>N̂(u,v) = N(u,v)/‖N(u,v)‖</span>?", a: "Enhetsnormalvektor", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas en yta som har en normalvektor i varje punkt?", a: "Reguljär yta", s: "Ytor" },
+  { c: "Ytor", q: "Vad kallas en yta där <span class='math'>N(u,v): S → ℝⁿ</span> kan definieras kontinuerligt?", a: "Orienterbar yta", s: "Ytor" },
+
+  /* ─── YTINTEGRALER ──────────────────────────────────────── */
+  { c: "Ytintegraler", q: "Vad heter <span class='math'>∫∫<sub>S</sub> f dS = ∫∫<sub>Ŝ</sub> f(r(u,v))‖r'<sub>u</sub>×r'<sub>v</sub>‖ du dv</span>?", a: "Ytintegral av skalärfält", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad kallas <span class='math'>dS = ‖r'<sub>u</sub> × r'<sub>v</sub>‖ du dv</span>?", a: "Ytelement (skalärt)", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad heter <span class='math'>|S| = ∫∫<sub>S</sub> dS</span>?", a: "Ytarea", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad heter <span class='math'>∫∫<sub>S</sub> F · dS = ∫∫<sub>Ŝ</sub> F · (r'<sub>u</sub> × r'<sub>v</sub>) du dv</span>?", a: "Normalytintegral", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad kallas <span class='math'>dS = (r'<sub>u</sub> × r'<sub>v</sub>) du dv</span>?", a: "Vektorytelement", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad heter <span class='math'>Φ = ∫∫<sub>S</sub> F · dS</span>?", a: "Flöde", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad heter <span class='math'>∯<sub>S</sub> F · dS</span> för en sluten yta?", a: "Nettoflöde", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad kallas ett vektorfält där nettoflödet alltid är noll genom varje sluten yta?", a: "Inkompressibelt vektorfält", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vad kallas en vektorfunktion <span class='math'>ψ</span> som uppfyller <span class='math'>F = ∇ × ψ</span>?", a: "Vektorpotential till F", s: "Ytintegraler" },
+  { c: "Ytintegraler", q: "Vilka tre påståenden är ekvivalenta för <span class='math'>F</span> i ett kontraherbart område?", a: "Inkompressibelt ⇔ Har vektorpotential ⇔ Divergensfritt", s: "Integralsatser" },
+
+  /* ─── VEKTORKALKYL ──────────────────────────────────────── */
+  { c: "Vektorkalkyl", q: "Vad kallas <span class='math'>∇·F = ∂F<sub>x</sub>/∂x + ∂F<sub>y</sub>/∂y + ∂F<sub>z</sub>/∂z</span>?", a: "Divergensen av F", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad kallas <span class='math'>∇×F</span>?", a: "Rotationen av F", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad kallas <span class='math'>Δf = ∇·∇f = ∂²f/∂x² + ∂²f/∂y² + ∂²f/∂z²</span>?", a: "Laplacianen av f", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad kallas ett vektorfält där <span class='math'>∇×F = 0</span>?", a: "Rotationsfritt", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad kallas ett vektorfält där <span class='math'>∇·F = 0</span>?", a: "Divergensfritt", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad gäller alltid: <span class='math'>∇×(∇f) = ?</span>", a: "<span class='math'>0</span>", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad gäller alltid: <span class='math'>∇·(∇×F) = ?</span>", a: "<span class='math'>0</span>", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇(fg) = (∇f)g + f(∇g)</span>?", a: "Produktregel för gradient", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇×(fG) = (∇f)×G + f(∇×G)</span>?", a: "Produktregel för rotation", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇·(fG) = (∇f)·G + f(∇·G)</span>?", a: "Produktregel för divergens", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad blir <span class='math'>∇×(∇×F)</span>?", a: "<span class='math'>∇(∇·F) − ΔF</span>", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad kallas en differentialform som är <span class='math'>∇×(∇f) = 0</span> eller <span class='math'>∇·(∇×F) = 0</span>?", a: "Sluten differentialform", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "När är en differentialform exakt?", a: "Exakt ⇔ sluten (i kontraherbart område)", s: "Vektorkalkyl" },
+
+  /* ─── INTEGRALSATSER ────────────────────────────────────── */
+  { c: "Integralsatser", q: "Vad heter satsen <span class='math'>∫<sub>Ω</sub> rot f dx = ∫<sub>∂Ω</sub> f · t ds</span> i ℝ²?", a: "Greens sats", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter satsen <span class='math'>∫∫<sub>Ω</sub> (∇×F) · n ds = ∮<sub>∂Ω</sub> F · dr</span> i ℝ³?", a: "Stokes sats", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter satsen <span class='math'>∫<sub>Ω</sub> ∇·F dx = ∫<sub>∂Ω</sub> F · n̂ ds</span>?", a: "Gauss sats (divergenssatsen)", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter satsen <span class='math'>∫<sub>Ω</sub> ∂f/∂x<sub>i</sub> dx = ∫<sub>∂Ω</sub> f n<sub>i</sub> ds</span>?", a: "Fundamentalsatsen i flera dimensioner", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter formeln <span class='math'>∫<sub>Ω</sub> (∂f/∂x<sub>i</sub>) g dx = ∫<sub>∂Ω</sub> f g n<sub>i</sub> ds − ∫<sub>Ω</sub> f (∂g/∂x<sub>i</sub>) dx</span>?", a: "Partiell integration i flera variabler", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter formeln <span class='math'>∫<sub>Ω</sub> Δf · g dx = ∫<sub>∂Ω</sub> ∂<sub>n</sub>f · g ds − ∫<sub>Ω</sub> ∇f · ∇g dx</span>?", a: "Greens första identitet", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad kallas <span class='math'>∂<sub>n</sub>f = ∇f · n</span>?", a: "Normalderivatan", s: "Integralsatser" },
+  { c: "Integralsatser", q: "Vad heter den generaliserade satsen <span class='math'>∫<sub>Ω</sub> df = ∫<sub>∂Ω</sub> f</span>?", a: "Generaliserade Stokes sats", s: "Integralsatser" },
+
+  /* ─── DISKRETISERING & MESH ─────────────────────────────── */
+  { c: "Diskretisering & mesh", q: "Vad kallas det konvexa höljet av <span class='math'>k+1</span> affint oberoende punkter?", a: "k-simplex", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är ett 0-simplex?", a: "En punkt", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är ett 1-simplex?", a: "Ett linjesegment", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är ett 2-simplex?", a: "En triangel", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är ett 3-simplex?", a: "En tetraeder", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas ett triangelnät där cellerna möts kant-mot-kant eller hörn-mot-hörn?", a: "Konformt nät", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas en triangulering av ett polygonområde i ℝ²?", a: "Triangelnät", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas en tetraedrisering av ett polygonområde i ℝ³?", a: "Tetraedernät", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vilka två listor beskriver ett beräkningsnät?", a: "Nodlista V och celllista K", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas en funktion vars restriktion till varje cell K är ett polynom?", a: "Styckvis polynom", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas basfunktionerna för kontinuerliga styckvis linjära polynom i 1D?", a: "Hattfunktioner", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas basfunktionerna för kontinuerliga styckvis linjära polynom i 2D?", a: "Tältfunktioner", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad uppfyller hattfunktionerna i noderna?", a: "<span class='math'>φ<sub>i</sub>(v<sub>j</sub>) = δ<sub>ij</sub></span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad blir summan <span class='math'>∑<sub>i=1</sub><sup>N</sup> φ<sub>i</sub>(x)</span>?", a: "<span class='math'>1</span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas avbildningen <span class='math'>F<sub>K</sub>(x̂) = ∑ λ<sub>i</sub>(x̂) v<sub>i</sub></span>?", a: "Affin avbildning från referenscell till K", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad kallas vikterna <span class='math'>λ<sub>i</sub></span> med <span class='math'>λ<sub>i</sub>(v<sub>j</sub>) = δ<sub>ij</sub></span> och <span class='math'>∑ λ<sub>i</sub> = 1</span>?", a: "Barycentriska koordinater", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är referensintervallet i 1D?", a: "<span class='math'>K̂<sub>1</sub> = [0, 1]</span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är referenstriangeln i 2D?", a: "<span class='math'>K̂<sub>2</sub></span> med hörn <span class='math'>(0,0), (1,0), (0,1)</span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är referenstetraedern i 3D?", a: "<span class='math'>K̂<sub>3</sub></span> med hörn <span class='math'>(0,0,0), (1,0,0), (0,1,0), (0,0,1)</span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Vad är derivatan av affina avbildningen <span class='math'>F<sub>K</sub>'</span>?", a: "<span class='math'>[v<sub>2</sub>−v<sub>1</sub>, v<sub>3</sub>−v<sub>1</sub>, …, v<sub>n+1</sub>−v<sub>1</sub>]</span>", s: "Diskretisering" },
+  { c: "Diskretisering & mesh", q: "Hur beräknas derivatan av en basfunktion <span class='math'>∇φ</span> via referenscellen?", a: "<span class='math'>∇φ = (F<sub>K</sub>')<sup>−T</sup> ∇<sub>x̂</sub> φ̂ ∘ F<sub>K</sub><sup>−1</sup></span>", s: "Diskretisering" },
+
+  /* ─── FUNKTIONSRUM ──────────────────────────────────────── */
+  { c: "Funktionsrum", q: "Vad kallas normen <span class='math'>‖f‖<sub>L<sup>p</sup>(Ω)</sub> = (∫<sub>Ω</sub> |f|<sup>p</sup> dx)<sup>1/p</sup></span>?", a: "L<sup>p</sup>-norm", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad kallas normen <span class='math'>‖f‖<sub>L<sup>∞</sup>(Ω)</sub> = ess sup<sub>x ∈ Ω</sub> |f(x)|</span>?", a: "L<sup>∞</sup>-norm", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad kallas <span class='math'>⟨f, g⟩ = ∫<sub>Ω</sub> f g dx</span>?", a: "L²-skalärprodukt", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Hur kan L²-normen uttryckas?", a: "<span class='math'>‖f‖ = √⟨f, f⟩</span>", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad heter olikheten <span class='math'>|⟨f, g⟩| ≤ ‖f‖ · ‖g‖</span>?", a: "Cauchy-Schwarz olikhet", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad heter olikheten <span class='math'>‖f + g‖ ≤ ‖f‖ + ‖g‖</span>?", a: "Triangelolikheten", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad kallas L<sup>p</sup>(Ω)-rummen?", a: "Banach-rum (fullständigt normerat linjärt rum)", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad kallas L²(Ω)-rummet?", a: "Hilbert-rum (Banach-rum med skalärprodukt)", s: "Funktionsrum" },
+  { c: "Funktionsrum", q: "Vad är ett funktionsrum för?", a: "Ett linjärt rum (vektorrum) av funktioner", s: "Funktionsrum" },
+
+  /* ─── INTERPOLATION & PROJEKTION ────────────────────────── */
+  { c: "Interpolation & projektion", q: "Vad kallas funktionen <span class='math'>π<sub>h</sub>f(x) = ∑<sub>i=1</sub><sup>N<sub>v</sub></sup> f(v<sub>i</sub>) φ<sub>i</sub>(x)</span>?", a: "Styckvis linjär interpolant av f", s: "Interpolation" },
+  { c: "Interpolation & projektion", q: "Vilken egenskap har <span class='math'>π<sub>h</sub>f</span> i noderna?", a: "Sammanfaller med f: <span class='math'>π<sub>h</sub>f(v<sub>i</sub>) = f(v<sub>i</sub>)</span>", s: "Interpolation" },
+  { c: "Interpolation & projektion", q: "Vad gäller för feluppskattning av interpolation?", a: "<span class='math'>max ‖f − π<sub>h</sub>f‖ ≤ ½ ‖h² D²f‖</span>", s: "Interpolation" },
+  { c: "Interpolation & projektion", q: "Vad är konvergensordningen för interpolationsfelet i h?", a: "Kvadratisk i h (om <span class='math'>f ∈ C²</span>)", s: "Interpolation" },
+  { c: "Interpolation & projektion", q: "Vad kallas operatorn <span class='math'>P<sub>h</sub>f</span> som uppfyller <span class='math'>⟨P<sub>h</sub>f, v⟩ = ⟨f, v⟩</span> för alla v ∈ V<sub>h</sub>?", a: "Ortogonal projektion av f på V<sub>h</sub>", s: "Projektion" },
+  { c: "Interpolation & projektion", q: "Vilket ekvationssystem löser man för att beräkna ortogonal projektion?", a: "<span class='math'>AF = b</span> med <span class='math'>A<sub>ij</sub> = ⟨φ<sub>j</sub>, φ<sub>i</sub>⟩, b<sub>i</sub> = ⟨f, φ<sub>i</sub>⟩</span>", s: "Projektion" },
+  { c: "Interpolation & projektion", q: "Vad heter satsen att <span class='math'>P<sub>h</sub>f</span> är bästa L²-approximationen?", a: "Satsen om bästa approximation", s: "Projektion" },
+  { c: "Interpolation & projektion", q: "Vad gäller för feluppskattning av ortogonal projektion?", a: "<span class='math'>max ‖f − P<sub>h</sub>f‖ ≤ C ‖h² D²f‖</span>", s: "Projektion" },
+
+  /* ─── KVADRATUR ─────────────────────────────────────────── */
+  { c: "Kvadratur", q: "Vad kallas approximationen <span class='math'>∫<sub>Ω</sub> f dx ≈ ∑<sub>K</sub> ∑<sub>k</sub> w<sub>k</sub><sup>K</sup> f(x<sub>k</sub><sup>K</sup>)</span>?", a: "Kvadratur", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vad heter kvadraturen med en enda mittpunkt per cell (centroiden)?", a: "Centrumkvadratur", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vad heter kvadraturen där hörnen är kvadraturpunkter med vikt <span class='math'>|K|/(n+1)</span>?", a: "Hörnkvadratur", s: "Kvadratur" },
+  { c: "Kvadratur", q: "För vilken grad polynom är hörnkvadratur exakt?", a: "<span class='math'>r = 1</span> (linjära polynom)", s: "Kvadratur" },
+  { c: "Kvadratur", q: "För vilken grad polynom är centrumkvadratur exakt?", a: "<span class='math'>r = 2</span> (kvadratisk konvergens i h)", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vad kallas <span class='math'>w<sub>k</sub><sup>K</sup></span> i en kvadraturformel?", a: "Kvadraturvikter", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vad kallas <span class='math'>x<sub>k</sub><sup>K</sup></span> i en kvadraturformel?", a: "Kvadraturpunkter", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vad är summan av kvadraturvikterna per cell?", a: "<span class='math'>∑ w<sub>k</sub><sup>K</sup> = |K|</span> (cellens mått)", s: "Kvadratur" },
+
+  /* ─── PDE-EKVATIONER ────────────────────────────────────── */
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>−Δu = f</span>?", a: "Poissons ekvation", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>−Δu = 0</span>?", a: "Laplaces ekvation", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>∂(cu)/∂t + ∇·(−κ∇u) = f</span>?", a: "Värmeledningsekvationen", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>∂(cu)/∂t + ∇·(−κ∇u) + β·∇u = f</span>?", a: "Advektion-diffusionsekvationen", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>∂u/∂t + ∇·q = f</span>?", a: "Konserveringslagen", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>∂²u/∂t² − c²Δu = 0</span>?", a: "Vågekvationen", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>ρ ∂²u/∂t² − ∇·σ(u) = f</span>?", a: "Navier-Cauchys ekvation", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter systemet <span class='math'>ρ du/dt − ∇·σ + ∇p = f, ∇·u = 0</span>?", a: "Navier-Stokes ekvationerna", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter de fyra ekvationerna för E och B (Gauss, Faraday, Ampère)?", a: "Maxwells ekvationer", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>iℏ ∂Ψ/∂t = (−ℏ²/2m Δ + V)Ψ</span>?", a: "Schrödingers ekvation", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter ekvationen <span class='math'>R<sub>μν</sub> − ½ R g<sub>μν</sub> = (8πG/c⁴) T<sub>μν</sub></span>?", a: "Einsteins fältekvationer", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter den stationära värmeledningsekvationen?", a: "<span class='math'>∇·(−κ∇u) = f</span>", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter PDE-ekvationen <span class='math'>−μΔu − (μ+λ)∇(∇·u) = f</span>?", a: "Linjär elasticitet (stationär Navier-Cauchy)", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter samband <span class='math'>σ(u, p) = 2με(u) − pI</span>?", a: "Konstitutiv lag (Newton-vätska)", s: "PDE" },
+  { c: "PDE-ekvationer", q: "Vad heter <span class='math'>ε(u) = ½(∇u + (∇u)<sup>T</sup>)</span>?", a: "Symmetriska gradienten (töjningstensorn)", s: "PDE" },
+
+  /* ─── RANDVILLKOR & FORMULERINGAR ───────────────────────── */
+  { c: "Randvillkor & formuleringar", q: "Vad kallas randvillkoret <span class='math'>u = u<sub>D</sub></span>?", a: "Dirichlet-villkor", s: "PDE" },
+  { c: "Randvillkor & formuleringar", q: "Vad kallas randvillkoret <span class='math'>κ ∂<sub>n</sub>u = g<sub>N</sub></span>?", a: "Neumann-villkor", s: "PDE" },
+  { c: "Randvillkor & formuleringar", q: "Vad kallas randvillkoret <span class='math'>κ ∂<sub>n</sub>u + γ(u − u<sub>R</sub>) = g<sub>R</sub></span>?", a: "Robin-villkor", s: "PDE" },
+  { c: "Randvillkor & formuleringar", q: "Vad heter en PDE med begynnelsevillkor och randvillkor?", a: "Begynnelse-randvärdesproblem (BRVP)", s: "PDE" },
+  { c: "Randvillkor & formuleringar", q: "Vad heter en stationär PDE med endast randvillkor?", a: "Randvärdesproblem (RVP)", s: "PDE" },
+  { c: "Randvillkor & formuleringar", q: "Vad heter formuleringen där PDE:n uttrycks punkt-vis i Ω?", a: "Stark formulering", s: "FEM" },
+  { c: "Randvillkor & formuleringar", q: "Vad heter formuleringen <span class='math'>a(u, v) = L(v)</span> för alla v ∈ V<sub>0</sub>?", a: "Svag formulering", s: "FEM" },
+  { c: "Randvillkor & formuleringar", q: "Vad heter formuleringen <span class='math'>a(u<sub>h</sub>, v) = L(v)</span> för alla v ∈ V<sub>h,0</sub>?", a: "Finita element-formulering (FEM)", s: "FEM" },
+
+  /* ─── FEM-MATRISER ──────────────────────────────────────── */
+  { c: "FEM-matriser", q: "Vad kallas matrisen <span class='math'>A<sub>ij</sub> = ∫<sub>Ω</sub> κ ∇φ<sub>j</sub> · ∇φ<sub>i</sub> dx</span>?", a: "Styvhetsmatrisen", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad kallas vektorn <span class='math'>b<sub>i</sub> = ∫<sub>Ω</sub> f φ<sub>i</sub> dx + ∫<sub>Γ<sub>R</sub></sub> (g<sub>R</sub> + γ u<sub>R</sub>) φ<sub>i</sub> ds</span>?", a: "Lastvektorn", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad kallas matrisen <span class='math'>M<sub>ij</sub> = ∫<sub>Ω</sub> φ<sub>j</sub> φ<sub>i</sub> dx</span>?", a: "Massmatrisen", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter villkoret <span class='math'>a(u − u<sub>h</sub>, v) = 0</span> för alla v ∈ V<sub>h,0</sub>?", a: "Galerkin-ortogonaliteten", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad blir systemet för tidsberoende PDE efter FEM-diskretisering i rum?", a: "ODE-systemet <span class='math'>M U̇(t) + A U(t) = b(t)</span>", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter tidsstegningen <span class='math'>M U(t<sub>k+1</sub>) = M U(t<sub>k</sub>) − Δt A U(t<sub>k</sub>) + Δt b(t<sub>k</sub>)</span>?", a: "Explicit Euler", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter tidsstegningen <span class='math'>(M + Δt A) U(t<sub>k+1</sub>) = M U(t<sub>k</sub>) + Δt b(t<sub>k+1</sub>)</span>?", a: "Implicit Euler", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter tidsstegningen <span class='math'>(M + ½Δt A) U(t<sub>k+1</sub>) = (M − ½Δt A) U(t<sub>k</sub>) + Δt b(t<sub>k+½</sub>)</span>?", a: "Mittpunktsmetoden (Crank–Nicolson)", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter algoritmen där element-styvhetsmatriser summeras till global matris?", a: "Assemblering", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter mappningen <span class='math'>ι<sub>K</sub>: {1,2,3} → {1,…,N}</span> från lokalt till globalt index?", a: "Lokal-till-global mappning", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad kallas matrisen <span class='math'>A<sub>ij</sub><sup>K</sup> = a<sub>K</sub>(φ<sub>j</sub><sup>K</sup>, φ<sub>i</sub><sup>K</sup>)</span>?", a: "Elementstyvhetsmatrisen", s: "FEM" },
+  { c: "FEM-matriser", q: "Vilken egenskap har styvhetsmatrisen när bilinjärformen är symmetrisk och positivt definit?", a: "Symmetrisk och positivt definit", s: "FEM" },
+  { c: "FEM-matriser", q: "Vilken struktur har styvhetsmatrisen typiskt?", a: "Gles (de flesta element är noll)", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter satsen: om <span class='math'>a</span> är symmetrisk och positivt definit, så är <span class='math'>u<sub>h</sub></span> bästa approximation i energinormen?", a: "Satsen om bästa approximation (FEM)", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter feluppskattningen <span class='math'>‖∇(u − u<sub>h</sub>)‖ ≤ C ‖h D²u‖</span>?", a: "Feluppskattning för finita element-lösningen", s: "FEM" },
+  { c: "FEM-matriser", q: "Vad heter operationen att förenkla massmatrisen till en diagonalmatris?", a: "Lumpning", s: "FEM" },
+
+  /* ─── EXTRA: ALGEBRA & VEKTORALGEBRA ────────────────────── */
+  { c: "Vektoralgebra i ℝⁿ", q: "Vad heter <span class='math'>x · y = ∑<sub>i=1</sub><sup>n</sup> x<sub>i</sub> y<sub>i</sub></span>?", a: "Skalärprodukten", s: "Avsnitt 1.1" },
+  { c: "Vektoralgebra i ℝⁿ", q: "Vad heter olikheten <span class='math'>‖x + y‖ ≤ ‖x‖ + ‖y‖</span> i ℝⁿ?", a: "Triangelolikheten", s: "Avsnitt 1.1" },
+  { c: "Vektoralgebra i ℝⁿ", q: "Vad heter olikheten <span class='math'>|x · y| ≤ ‖x‖ · ‖y‖</span>?", a: "Cauchy-Schwarz olikheten", s: "Avsnitt 1.1" },
+  { c: "Vektoralgebra i ℝⁿ", q: "Vad heter avståndet <span class='math'>d(x, y) = √((y<sub>1</sub>−x<sub>1</sub>)² + … + (y<sub>n</sub>−x<sub>n</sub>)²)</span>?", a: "Euklidiskt avstånd <span class='math'>= ‖x − y‖</span>", s: "Avsnitt 1.1" },
+
+  /* ─── EXTRA: SLUTNA DIFFERENTIALFORMER & POTENTIALER ───── */
+  { c: "Potential & exakta former", q: "Vad heter satsen som garanterar att rotationsfritt fält i enkelt sammanhängande område har en skalär potential?", a: "Poincarés lemma (en differentialform är exakt ⇔ sluten)", s: "Integralsatser" },
+  { c: "Potential & exakta former", q: "Hur löser man systemet <span class='math'>∂ϕ/∂x = F<sub>x</sub>, ∂ϕ/∂y = F<sub>y</sub>, ∂ϕ/∂z = F<sub>z</sub></span>?", a: "Integrera och jämför termer för att hitta skalär potential", s: "Kurvintegraler" },
+  { c: "Potential & exakta former", q: "Vad krävs för att <span class='math'>F = ∇ϕ</span> ska existera?", a: "<span class='math'>F</span> rotationsfritt (<span class='math'>∇×F = 0</span>) och Ω enkelt sammanhängande", s: "Integralsatser" },
+  { c: "Potential & exakta former", q: "Vad krävs för att <span class='math'>F = ∇×ψ</span> ska existera?", a: "<span class='math'>F</span> divergensfritt (<span class='math'>∇·F = 0</span>) och Ω kontraherbart", s: "Integralsatser" },
+
+  /* ─── EXTRA: BESLUTSTRÄDET FÖR KURV-/YTINTEGRALER ─────── */
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∮<sub>C</sub> F · dr</span> om <span class='math'>F</span> är konservativ?", a: "Cirkulationen är 0", s: "Beslutsträd" },
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∮<sub>C</sub> F · dr</span> om <span class='math'>F</span> ej är konservativ (sluten kurva)?", a: "Använd Greens sats (2D) eller Stokes sats (3D)", s: "Beslutsträd" },
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∫<sub>C</sub> F · dr</span> från A till B om <span class='math'>F</span> är konservativ?", a: "<span class='math'>= ϕ(B) − ϕ(A)</span>", s: "Beslutsträd" },
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∯<sub>S</sub> F · dS</span> om S är sluten och <span class='math'>F</span> är inkompressibel?", a: "Nettoflödet är 0", s: "Beslutsträd" },
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∯<sub>S</sub> F · dS</span> om S är sluten och <span class='math'>F</span> ej är inkompressibel?", a: "Använd Gauss sats: <span class='math'>= ∫∫∫<sub>Ω</sub> ∇·F dV</span>", s: "Beslutsträd" },
+  { c: "Lösningsstrategi", q: "Hur löser du <span class='math'>∫∫<sub>S</sub> F · dS</span> om S är öppen och <span class='math'>F</span> är inkompressibel?", a: "Stäng ytan med enklare yta S₂, kör Gauss, ta bort S₂", s: "Beslutsträd" },
+
+  /* ─── EXTRA: ANNAN ANVÄNDBAR TEORI ───────────────────────── */
+  { c: "Övrig teori", q: "Vad heter restriktionen <span class='math'>f<sub>h</sub>|<sub>K</sub> ∈ P<sub>r</sub>(K)</span> där varje cell har ett polynom av grad r?", a: "Styckvis polynom av grad r", s: "Diskretisering" },
+  { c: "Övrig teori", q: "Vad kallas en mängd av <span class='math'>k+1</span> punkter <span class='math'>x<sub>0</sub>, …, x<sub>k</sub></span> där <span class='math'>x<sub>1</sub>−x<sub>0</sub>, …, x<sub>k</sub>−x<sub>0</sub></span> är linjärt oberoende?", a: "Affint oberoende", s: "Diskretisering" },
+  { c: "Övrig teori", q: "Vad kallas en mängd <span class='math'>{∑ w<sub>i</sub> x<sub>i</sub> | ∑ w<sub>i</sub> = 1, w<sub>i</sub> ≥ 0}</span>?", a: "Konvexa kombinationer (= konvexa höljet)", s: "Diskretisering" },
+  { c: "Övrig teori", q: "Vad kallas summan <span class='math'>S(f, P) = ∑ f<sub>sup</sub> Δx<sub>k</sub> Δy<sub>l</sub></span>?", a: "Övre Riemann-summa", s: "Avsnitt 3" },
+  { c: "Övrig teori", q: "Vad kallas summan <span class='math'>S(f, P) = ∑ f<sub>inf</sub> Δx<sub>k</sub> Δy<sub>l</sub></span>?", a: "Undre Riemann-summa", s: "Avsnitt 3" },
+  { c: "Övrig teori", q: "När är en funktion Riemann-integrerbar?", a: "När övre och undre Riemann-summor sammanfaller", s: "Avsnitt 3" },
+  { c: "Övrig teori", q: "Vilka egenskaper har dubbel-/trippelintegralen?", a: "Additiv, linjär, monoton, uppfyller triangelolikheten", s: "Avsnitt 3" },
+  { c: "Övrig teori", q: "Vad heter ekvivalensen mellan stark och svag formulering?", a: "En två gånger kontinuerligt deriverbar lösning till svag form är lösning till stark form (och omvänt)", s: "FEM" },
+  { c: "Övrig teori", q: "Vilken matristyp är massmatrisen <span class='math'>M</span>?", a: "Symmetrisk och positivt definit", s: "FEM" },
+  { c: "Övrig teori", q: "Vad heter feluppskattningen <span class='math'>‖∇(f − π<sub>h</sub>f)‖ ≤ C ‖h D²f‖</span>?", a: "Gradient-feluppskattning för interpolation", s: "Interpolation" },
+  { c: "Övrig teori", q: "Vad är frobeniusnormen av Hesse-matrisen <span class='math'>D²f</span>?", a: "<span class='math'>‖∂²f/(∂x<sub>i</sub>∂x<sub>j</sub>)‖<sub>F</sub></span>", s: "Interpolation" },
+  { c: "Övrig teori", q: "Vad heter Newton-iterationen för icke-linjär PDE <span class='math'>F(U) = 0</span>?", a: "<span class='math'>U<sup>(k+1)</sup> = U<sup>(k)</sup> − F'(U<sup>(k)</sup>)<sup>−1</sup> F(U<sup>(k)</sup>)</span>", s: "FEM" },
+  { c: "Övrig teori", q: "Vad är konvergenshastigheten för centrumkvadratur i h?", a: "<span class='math'>O(h²)</span>", s: "Kvadratur" },
+  { c: "Övrig teori", q: "Vad heter kvadraturen med högsta möjliga noggrannhet för givet antal punkter?", a: "Gauss-Legendre-kvadratur", s: "Kvadratur" },
+
+  /* ─── EXTRA: SPECIFIKA SATSER FRÅN FÖRELÄSNINGSANTECK. ──── */
+  { c: "Specialsatser", q: "Vad heter satsen <span class='math'>(f<sup>−1</sup>)'(ȳ) = (f'(x̄))<sup>−1</sup></span>?", a: "Inversa funktionssatsen", s: "Funktionssatser" },
+  { c: "Specialsatser", q: "Vad heter Bilinjäritet i bilinjär form <span class='math'>a(αu + βv, w) = α·a(u,w) + β·a(v,w)</span>?", a: "Linjäritet i första argumentet", s: "FEM" },
+  { c: "Specialsatser", q: "Vilka tre formler matchar gradienten i polära, cylindriska, sfäriska koordinater?", a: "Olika uttryck men alla via <span class='math'>∇f = ∑ (∂f/∂q<sub>i</sub>) e<sub>i</sub></span>", s: "Koordinatsystem" },
+  { c: "Specialsatser", q: "Vad heter satsen som visar att kontinuerliga funktioner är integrerbara på kompakta mängder?", a: "Riemann-integrabilitet av kontinuerliga funktioner", s: "Avsnitt 3" },
+  { c: "Specialsatser", q: "Vad är invers polära koordinatomvandling?", a: "<span class='math'>r = √(x² + y²), φ = arctan(y/x) + nπ</span>", s: "Koordinatsystem" },
+  { c: "Specialsatser", q: "Vad är invers cylindrisk koordinatomvandling?", a: "<span class='math'>ρ = √(x² + y²), φ = arctan(y/x) + nπ, z = z</span>", s: "Koordinatsystem" },
+  { c: "Specialsatser", q: "Vad är invers sfärisk koordinatomvandling?", a: "<span class='math'>r = √(x² + y² + z²), θ = arccos(z/r), φ = arctan(y/x)</span>", s: "Koordinatsystem" },
+
+  /* ─── EXTRA: BERÄKNINGSALGORITMER ────────────────────────── */
+  { c: "Beräkningsalgoritmer", q: "I Newtons metod, vad löser man i varje steg?", a: "Linjärt system <span class='math'>f'(x<sub>k</sub>) h = −f(x<sub>k</sub>)</span>, sedan <span class='math'>x<sub>k+1</sub> = x<sub>k</sub> + h</span>", s: "Newtons metod" },
+  { c: "Beräkningsalgoritmer", q: "I FEM-assembleringen, vad är inre loopen för en triangel?", a: "Loopa över <span class='math'>i,j ∈ {1,2,3}</span>, addera <span class='math'>A<sub>ij</sub><sup>K</sup></span> till <span class='math'>A<sub>ι<sub>K</sub>(i),ι<sub>K</sub>(j)</sub></span>", s: "FEM" },
+  { c: "Beräkningsalgoritmer", q: "Hur sätter man Dirichlet-villkor i FEM efter assemblering?", a: "Radera raden, sätt diagonalen = 1, sätt motsvarande b-värde", s: "FEM" },
+  { c: "Beräkningsalgoritmer", q: "Vilken är den totala styvhetsmatrisen som summa av elementstyvhetsmatriser?", a: "<span class='math'>A<sub>IJ</sub> = ∑<sub>K ∈ K<sub>IJ</sub></sub> A<sub>ij</sub><sup>K</sup></span>", s: "FEM" },
+
+  /* ─── EXTRA: TYPER AV DERIVATOR (formelhäftet sista del) ──── */
+  { c: "Differentialoperatorer", q: "Vilka är de fyra typer av derivator i flervariabelanalys?", a: "<span class='math'>f'</span> Jacobi-matris, <span class='math'>∇f</span> gradient, <span class='math'>∇×F</span> rotation, <span class='math'>∇·F</span> divergens", s: "Vektorkalkyl" },
+  { c: "Differentialoperatorer", q: "Vad blir <span class='math'>∇×F</span> i komponentform i ℝ³?", a: "<span class='math'>(∂F<sub>z</sub>/∂y − ∂F<sub>y</sub>/∂z, ∂F<sub>x</sub>/∂z − ∂F<sub>z</sub>/∂x, ∂F<sub>y</sub>/∂x − ∂F<sub>x</sub>/∂y)</span>", s: "Vektorkalkyl" },
+  { c: "Differentialoperatorer", q: "Vilken egenskap har gradient, rotation och divergens som operatorer?", a: "Linjära", s: "Vektorkalkyl" },
+  { c: "Differentialoperatorer", q: "Vilken ordning är nabla-operatorn?", a: "Första ordningens deriveringsoperator", s: "Vektorkalkyl" },
+  { c: "Differentialoperatorer", q: "Vilka är andra ordningens differentialoperatorer?", a: "<span class='math'>∇×(∇f), ∇·(∇×F), Δf, ∇×(∇×F), ∇(∇·F)</span>", s: "Vektorkalkyl" },
+
+  /* ─── EXTRA: TANGENT- & GRADIENTKOPPLINGAR ─────────────── */
+  { c: "Tangenter & gradienter", q: "Hur skrivs Newtons metod-iterationen för optimering?", a: "<span class='math'>x<sub>k+1</sub> = x<sub>k</sub> − (f''(x<sub>k</sub>))<sup>−1</sup> ∇f(x<sub>k</sub>)</span>", s: "Optimering" },
+  { c: "Tangenter & gradienter", q: "Vilka två tangentvektorer till en parametriserad yta?", a: "<span class='math'>r'<sub>u</sub> = ∂r/∂u</span> och <span class='math'>r'<sub>v</sub> = ∂r/∂v</span>", s: "Ytor" },
+  { c: "Tangenter & gradienter", q: "Vad heter <span class='math'>r'<sub>u</sub> × r'<sub>v</sub> = N</span>?", a: "Normalvektorn till ytan", s: "Ytor" },
+
+  /* ─── EXTRA: KOMPLETTERING AV BEGREPP ──────────────────── */
+  { c: "Kompletterande begrepp", q: "Vad är det generella optimeringsproblemet <span class='math'>x̄ = arg min<sub>x ∈ X</sub> f(x)</span>?", a: "Sök punkt i tillåtna mängden X som minimerar f", s: "Optimering" },
+  { c: "Kompletterande begrepp", q: "Vad heter <span class='math'>f: ℝⁿ → ℝ</span> i ett optimeringsproblem?", a: "Målfunktion", s: "Optimering" },
+  { c: "Kompletterande begrepp", q: "Vad heter mängden X i ett optimeringsproblem?", a: "Den tillåtna mängden (eller den tillåtna området)", s: "Optimering" },
+  { c: "Kompletterande begrepp", q: "Vilka villkor heter <span class='math'>∇f(x) + (g'(x))<sup>T</sup> λ = 0, g(x) = 0</span>?", a: "Optimalitetsvillkoren för Lagrange-multiplikatorer", s: "Optimering" },
+  { c: "Kompletterande begrepp", q: "Vad gäller om <span class='math'>P<sub>h</sub>: V → V<sub>h</sub></span> är en linjär operator?", a: "<span class='math'>P<sub>h</sub>(αf + βg) = α P<sub>h</sub>f + β P<sub>h</sub>g</span>", s: "Projektion" },
+  { c: "Kompletterande begrepp", q: "Vad gäller geometriskt om <span class='math'>P<sub>h</sub>f</span>?", a: "Den är 'rakt under' f i underrummet V<sub>h</sub> (ortogonal projektion)", s: "Projektion" },
+  { c: "Kompletterande begrepp", q: "Vad är resttermen i Taylors sats av grad 1?", a: "<span class='math'>E<sub>1</sub>[f, x](h) = ½ h<sup>T</sup> f''(ξ) h ≤ ½ ‖h‖² max ‖f''‖<sub>F</sub></span>", s: "Avsnitt 1.6" },
+  { c: "Kompletterande begrepp", q: "Vad är resttermen i Taylors sats av grad 2?", a: "<span class='math'>E<sub>2</sub>[f, x](h) = ⅙ f'''(ξ) · h · h · h ≤ ⅙ ‖h‖³ max ‖f'''‖<sub>F</sub></span>", s: "Avsnitt 1.6" },
+  { c: "Kompletterande begrepp", q: "Vad heter en linjär operator <span class='math'>π<sub>h</sub>(αf + βg)</span>?", a: "<span class='math'>α π<sub>h</sub>f + β π<sub>h</sub>g</span> (linjäritet av interpolanten)", s: "Interpolation" },
+  { c: "Kompletterande begrepp", q: "Vilka tre operationer kombinerar en affin avbildning?", a: "Sträckning, rotation och förflyttning", s: "Diskretisering" }
+
+];
+
+/* === END OF DATA === */
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// State
+const STORAGE_KEY = 'mve_quiz_v1';
+let state = {
+  mode: 'all',
+  shuffle: true,
+  repeatWrong: true,
+  selectedCats: null, // null = all
+  queue: [],
+  idx: 0,
+  right: 0,
+  wrong: 0,
+  shown: false,
+  history: {},
+  active: false
+};
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (saved.history) state.history = saved.history;
+    if (saved.shuffle !== undefined) state.shuffle = saved.shuffle;
+    if (saved.repeatWrong !== undefined) state.repeatWrong = saved.repeatWrong;
+    if (saved.selectedCats) state.selectedCats = saved.selectedCats;
+  } catch (e) { /* ignore */ }
+}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      history: state.history,
+      shuffle: state.shuffle,
+      repeatWrong: state.repeatWrong,
+      selectedCats: state.selectedCats
+    }));
+  } catch (e) { /* ignore */ }
+}
+
+// Build category list
+function getCategories() {
+  const set = new Set();
+  CARDS.forEach(c => set.add(c.c));
+  return Array.from(set);
+}
+
+// Compute mode card counts
+function modeCounts() {
+  const cats = getCategories();
+  return {
+    all: CARDS.length,
+    cats: cats.length
+  };
+}
+
+function renderModes() {
+  const cats = getCategories();
+  const counts = modeCounts();
+  const modes = [
+    {
+      key: 'all',
+      name: 'Hela häftet',
+      count: counts.all,
+      desc: `Alla teori-flashcards som täcker Shahins formelhäfte sida för sida. Hela kursen i ett pass.`
+    },
+    {
+      key: 'fem',
+      name: 'Endast FEM & PDE',
+      count: CARDS.filter(c => ['Diskretisering & mesh','Funktionsrum','Interpolation & projektion','Kvadratur','PDE-ekvationer','Randvillkor & formuleringar','FEM-matriser','Beräkningsalgoritmer'].includes(c.c)).length,
+      desc: `Kapitel 5–6: diskretisering, funktionsrum, kvadratur, PDE och finita element-metoden.`
+    },
+    {
+      key: 'vektor',
+      name: 'Vektorkalkyl',
+      count: CARDS.filter(c => ['Kurvor','Kurvintegraler','Ytor','Ytintegraler','Vektorkalkyl','Integralsatser','Potential & exakta former','Lösningsstrategi','Differentialoperatorer','Tangenter & gradienter'].includes(c.c)).length,
+      desc: `Kapitel 4: kurv-/ytintegraler, integralsatser (Greens, Stokes, Gauss) och beslutsträd för fältintegraler.`
+    },
+    {
+      key: 'diff',
+      name: 'Differentialkalkyl',
+      count: CARDS.filter(c => ['Topologi i ℝⁿ','Funktioner & gränsvärden','Derivata & linjärisering','Gradient & riktningsderivata','Newtons metod','Extremvärden','Optimering med bivillkor','Funktionssatser','Vektoralgebra i ℝⁿ'].includes(c.c)).length,
+      desc: `Kapitel 1–2: topologi, derivata, gradient, optimering, Lagrange och funktionssatser.`
+    },
+    {
+      key: 'integral',
+      name: 'Integralkalkyl',
+      count: CARDS.filter(c => ['Integraler','Koordinatsystem','Medelvärden & moment','Övrig teori'].includes(c.c)).length,
+      desc: `Kapitel 3: dubbel-/trippelintegraler, koordinatsystem, medelvärden och tröghetsmoment.`
+    }
+  ];
+
+  const html = modes.map(m => `
+    <button class="mode ${state.mode === m.key ? 'active' : ''}" data-mode="${m.key}">
+      <div class="mode-name">${m.name} <span class="count">· ${m.count}</span></div>
+      <div class="mode-desc">${m.desc}</div>
+    </button>
+  `).join('');
+  $('#modes').innerHTML = html;
+
+  $$('.mode').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.mode;
+      renderModes();
+    });
+  });
+}
+
+function modeFilter(card) {
+  switch (state.mode) {
+    case 'fem':
+      return ['Diskretisering & mesh','Funktionsrum','Interpolation & projektion','Kvadratur','PDE-ekvationer','Randvillkor & formuleringar','FEM-matriser','Beräkningsalgoritmer'].includes(card.c);
+    case 'vektor':
+      return ['Kurvor','Kurvintegraler','Ytor','Ytintegraler','Vektorkalkyl','Integralsatser','Potential & exakta former','Lösningsstrategi','Differentialoperatorer','Tangenter & gradienter'].includes(card.c);
+    case 'diff':
+      return ['Topologi i ℝⁿ','Funktioner & gränsvärden','Derivata & linjärisering','Gradient & riktningsderivata','Newtons metod','Extremvärden','Optimering med bivillkor','Funktionssatser','Vektoralgebra i ℝⁿ'].includes(card.c);
+    case 'integral':
+      return ['Integraler','Koordinatsystem','Medelvärden & moment','Övrig teori'].includes(card.c);
+    case 'all':
+    default:
+      return true;
+  }
+}
+
+// Render category filter
+function renderCatFilter() {
+  const cats = getCategories();
+  const sel = state.selectedCats || cats;
+  $('#catGrid').innerHTML = cats.map(cat => {
+    const on = sel.includes(cat);
+    const count = CARDS.filter(c => c.c === cat).length;
+    return `<button class="cat-chip ${on ? 'on' : ''}" data-cat="${cat}">${cat} <span style="opacity:0.6">· ${count}</span></button>`;
+  }).join('');
+  updateCatSummary();
+  $$('.cat-chip').forEach(b => b.addEventListener('click', () => {
+    const cat = b.dataset.cat;
+    if (!state.selectedCats) state.selectedCats = [...cats];
+    if (state.selectedCats.includes(cat)) {
+      state.selectedCats = state.selectedCats.filter(c => c !== cat);
+    } else {
+      state.selectedCats.push(cat);
+    }
+    if (state.selectedCats.length === cats.length) state.selectedCats = null;
+    saveState();
+    renderCatFilter();
+  }));
+}
+function updateCatSummary() {
+  const cats = getCategories();
+  const sel = state.selectedCats || cats;
+  $('#catSummary').textContent = sel.length === cats.length ? `(alla ${cats.length})` : `(${sel.length}/${cats.length})`;
+}
+
+// Build queue
+function buildQueue() {
+  let pool = CARDS.filter(modeFilter);
+  if (state.selectedCats) {
+    pool = pool.filter(c => state.selectedCats.includes(c.c));
+  }
+  if (state.shuffle) {
+    pool = pool.slice();
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+  }
+  return pool;
+}
+
+function startQuiz() {
+  state.queue = buildQueue();
+  if (state.queue.length === 0) {
+    alert('Inga kort i den nuvarande filtreringen. Justera filter.');
+    return;
+  }
+  state.idx = 0;
+  state.right = 0;
+  state.wrong = 0;
+  state.shown = false;
+  state.active = true;
+  $('#cardWrap').hidden = false;
+  $('#finishedWrap').hidden = true;
+  renderCard();
+  document.querySelector('#cardWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderCard() {
+  if (state.idx >= state.queue.length) {
+    finishQuiz();
+    return;
+  }
+  const card = state.queue[state.idx];
+  $('#cardCat').textContent = card.c;
+  $('#cardSrc').textContent = card.s || '';
+  $('#qText').innerHTML = card.q;
+  $('#aText').innerHTML = card.a;
+  state.shown = false;
+  $('#aText').classList.remove('shown');
+  $('#actionsHidden').hidden = false;
+  $('#actionsShown').hidden = true;
+  $('#curIdx').textContent = state.idx + 1;
+  $('#totalIdx').textContent = state.queue.length;
+  $('#rightCount').textContent = state.right;
+  $('#wrongCount').textContent = state.wrong;
+  const pct = ((state.idx) / state.queue.length) * 100;
+  $('#progressFill').style.width = pct + '%';
+}
+
+function reveal() {
+  if (state.shown) return;
+  state.shown = true;
+  $('#aText').classList.add('shown');
+  $('#actionsHidden').hidden = true;
+  $('#actionsShown').hidden = false;
+}
+
+function markRight() {
+  if (!state.shown) reveal();
+  state.right += 1;
+  next();
+}
+
+function markWrong() {
+  if (!state.shown) reveal();
+  state.wrong += 1;
+  // re-queue if enabled
+  if (state.repeatWrong) {
+    const card = state.queue[state.idx];
+    // re-insert about 5 positions ahead, or at end if short queue
+    const pos = Math.min(state.queue.length, state.idx + 5);
+    state.queue.splice(pos, 0, card);
+  }
+  next();
+}
+
+function skip() {
+  // move to end without scoring
+  const card = state.queue.splice(state.idx, 1)[0];
+  state.queue.push(card);
+  if (state.idx >= state.queue.length) state.idx = state.queue.length - 1;
+  renderCard();
+}
+
+function next() {
+  state.idx += 1;
+  renderCard();
+}
+
+function finishQuiz() {
+  $('#cardWrap').hidden = true;
+  $('#finishedWrap').hidden = false;
+  $('#finalRight').textContent = state.right;
+  $('#finalTotal').textContent = state.right + state.wrong;
+  state.active = false;
+}
+
+function resetHistory() {
+  if (!confirm('Nollställ all historik och inställningar?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state.history = {};
+  state.selectedCats = null;
+  state.shuffle = true;
+  state.repeatWrong = true;
+  $('#shuffleToggle').checked = true;
+  $('#repeatWrong').checked = true;
+  $('#shuffleState').textContent = 'PÅ';
+  $('#repeatState').textContent = 'PÅ';
+  renderCatFilter();
+  renderModes();
+}
+
+// Init
+loadState();
+renderModes();
+renderCatFilter();
+$('#shuffleToggle').checked = state.shuffle;
+$('#repeatWrong').checked = state.repeatWrong;
+$('#shuffleState').textContent = state.shuffle ? 'PÅ' : 'AV';
+$('#repeatState').textContent = state.repeatWrong ? 'PÅ' : 'AV';
+
+$('#shuffleToggle').addEventListener('change', e => {
+  state.shuffle = e.target.checked;
+  $('#shuffleState').textContent = state.shuffle ? 'PÅ' : 'AV';
+  saveState();
+});
+$('#repeatWrong').addEventListener('change', e => {
+  state.repeatWrong = e.target.checked;
+  $('#repeatState').textContent = state.repeatWrong ? 'PÅ' : 'AV';
+  saveState();
+});
+
+$('#startBtn').addEventListener('click', startQuiz);
+$('#resetBtn').addEventListener('click', resetHistory);
+$('#revealBtn').addEventListener('click', reveal);
+$('#skipBtn').addEventListener('click', skip);
+$('#rightBtn').addEventListener('click', markRight);
+$('#wrongBtn').addEventListener('click', markWrong);
+$('#nextBtn').addEventListener('click', next);
+$('#restartBtn').addEventListener('click', startQuiz);
+$('#backHomeBtn').addEventListener('click', () => {
+  $('#finishedWrap').hidden = true;
+  $('#cardWrap').hidden = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+$('#catAll').addEventListener('click', () => {
+  state.selectedCats = null;
+  saveState();
+  renderCatFilter();
+});
+$('#catNone').addEventListener('click', () => {
+  state.selectedCats = [];
+  saveState();
+  renderCatFilter();
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (!state.active) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const k = e.key.toLowerCase();
+  if (e.code === 'Space' || k === ' ') {
+    e.preventDefault();
+    if (!state.shown) reveal();
+    else next();
+  } else if (k === 'r') {
+    if (state.shown) markRight();
+  } else if (k === 'f') {
+    if (state.shown) markWrong();
+  } else if (k === 'n') {
+    next();
+  } else if (k === 's') {
+    skip();
+  }
+});
+
+// Show card count in header
+const total = CARDS.length;
+console.log(`Loaded ${total} flashcards across ${getCategories().length} categories.`);
+</script>
+</body>
+</html>
