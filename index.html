@@ -635,8 +635,6 @@ const CARDS = [
   /* ─── NEWTONS METOD ─────────────────────────────────────── */
   { c: "Newtons metod", q: "Vad heter iterationen <span class='math'>x<sub>k+1</sub> = x<sub>k</sub> − (f'(x<sub>k</sub>))⁻¹ f(x<sub>k</sub>)</span>?", a: "Newtons metod", s: "Kapitel 2" },
   { c: "Newtons metod", q: "Vilken konvergensordning har Newtons metod i närheten av en enkel rot?", a: "Kvadratisk", s: "Kapitel 2" },
-  { c: "Newtons metod", q: "Vad reduceras konvergensordningen till om <span class='math'>f'(x̄) = 0</span> (dubbelrot)?", a: "Linjär", s: "Kapitel 2" },
-  { c: "Newtons metod", q: "Vad kallas en variant där <span class='math'>f'</span> approximeras istället för att beräknas exakt?", a: "Kvasi-Newton-metoden", s: "Kapitel 2" },
 
   /* ─── EXTREMVÄRDEN ──────────────────────────────────────── */
   { c: "Extremvärden", q: "Vad kallas en punkt <span class='math'>x̄</span> där <span class='math'>∇f(x̄) = 0</span>?", a: "Stationär punkt", s: "Extremvärden" },
@@ -663,7 +661,6 @@ const CARDS = [
   /* ─── INTEGRALER ────────────────────────────────────────── */
   { c: "Integraler", q: "Vad heter satsen <span class='math'>∫∫<sub>R</sub> f dx dy = ∫<sub>a</sub><sup>b</sup>(∫<sub>c</sub><sup>d</sup> f dy)dx</span>?", a: "Fubinis sats", s: "Avsnitt 3" },
   { c: "Integraler", q: "Vad heter <span class='math'>dA = dx dy</span>?", a: "Areaelement", s: "Avsnitt 3" },
-  { c: "Integraler", q: "Vad heter <span class='math'>dV = dx dy dz</span>?", a: "Volymelement", s: "Avsnitt 3" },
   { c: "Integraler", q: "Vad heter formeln <span class='math'>∫∫<sub>Ω</sub> f dA = ∫∫<sub>Ω̂</sub> (f ∘ g)|det g'| dÂ</span>?", a: "Variabelsubstitution i dubbelintegral", s: "Avsnitt 3" },
   { c: "Integraler", q: "Vad kallas <span class='math'>|det g'|</span> i variabelsubstitutionen?", a: "Jacobi-determinanten", s: "Avsnitt 3" },
   { c: "Integraler", q: "Vad heter formeln <span class='math'>∫∫ f(x)g(y) dx dy = ∫ f(x) dx · ∫ g(y) dy</span>?", a: "Separabel dubbelintegral", s: "Avsnitt 3" },
@@ -684,7 +681,6 @@ const CARDS = [
   { c: "Koordinatsystem", q: "Vilka är variabelbytena för sfäriska koordinater?", a: "<span class='math'>x = r sin θ cos φ, y = r sin θ sin φ, z = r cos θ</span>", s: "Koordinatsystem" },
   { c: "Koordinatsystem", q: "Vad kallas vinkeln θ i sfäriska koordinater?", a: "Zenitvinkel (polär vinkel)", s: "Koordinatsystem" },
   { c: "Koordinatsystem", q: "Vad kallas vinkeln φ i sfäriska koordinater?", a: "Azimutvinkel", s: "Koordinatsystem" },
-  { c: "Koordinatsystem", q: "Vad är arean på en sfär med radie R med <span class='math'>dS</span>-element?", a: "<span class='math'>dS = R² sin θ dθ dφ</span>", s: "Koordinatsystem" },
   { c: "Koordinatsystem", q: "Vad är formeln för Laplacianen i polära koordinater?", a: "<span class='math'>Δf = (1/r) ∂/∂r(r ∂f/∂r) + (1/r²) ∂²f/∂φ²</span>", s: "Koordinatsystem" },
 
   /* ─── MEDELVÄRDEN & MOMENT ──────────────────────────────── */
@@ -708,9 +704,7 @@ const CARDS = [
   { c: "Kurvor", q: "Vad kallas <span class='math'>T̂(t) = r'(t)/‖r'(t)‖</span>?", a: "Enhetstangentvektor", s: "Kurvor" },
   { c: "Kurvor", q: "Vad kallas en kurva som har en tangentvektor i varje punkt?", a: "Reguljär kurva", s: "Kurvor" },
   { c: "Kurvor", q: "Vad heter <span class='math'>v(t) = r'(t)</span>?", a: "Hastighet längs kurvan", s: "Kurvor" },
-  { c: "Kurvor", q: "Vad heter <span class='math'>‖v(t)‖ = ‖r'(t)‖</span>?", a: "Fart", s: "Kurvor" },
   { c: "Kurvor", q: "Vad heter <span class='math'>a(t) = r''(t)</span>?", a: "Acceleration", s: "Kurvor" },
-  { c: "Kurvor", q: "Vad kallas linjen <span class='math'>L(t) = r<sub>0</sub> + r'(t<sub>0</sub>)(t − t<sub>0</sub>)</span>?", a: "Tangentlinjen till C i <span class='math'>r<sub>0</sub></span>", s: "Kurvor" },
 
   /* ─── KURVINTEGRALER ────────────────────────────────────── */
   { c: "Kurvintegraler", q: "Vad heter <span class='math'>∫<sub>C</sub> f ds = ∫<sub>a</sub><sup>b</sup> f(r(t))‖r'(t)‖ dt</span>?", a: "Kurvintegral av skalärfält", s: "Kurvintegraler" },
@@ -757,8 +751,7 @@ const CARDS = [
   { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇(fg) = (∇f)g + f(∇g)</span>?", a: "Produktregel för gradient", s: "Vektorkalkyl" },
   { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇×(fG) = (∇f)×G + f(∇×G)</span>?", a: "Produktregel för rotation", s: "Vektorkalkyl" },
   { c: "Vektorkalkyl", q: "Vad heter regeln <span class='math'>∇·(fG) = (∇f)·G + f(∇·G)</span>?", a: "Produktregel för divergens", s: "Vektorkalkyl" },
-  { c: "Vektorkalkyl", q: "Vad blir <span class='math'>∇×(∇×F)</span>?", a: "<span class='math'>∇(∇·F) − ΔF</span>", s: "Vektorkalkyl" },
-  { c: "Vektorkalkyl", q: "Vad kallas en differentialform som är <span class='math'>∇×(∇f) = 0</span> eller <span class='math'>∇·(∇×F) = 0</span>?", a: "Sluten differentialform", s: "Vektorkalkyl" },
+  { c: "Vektorkalkyl", q: "Vad blir <span class='math'>∇×(∇×F)</span>?", a: "<span class='math'>∇(∇·F) − ΔF</span>", s: "Vektorkalkyl" }, 
   { c: "Vektorkalkyl", q: "När är en differentialform exakt?", a: "Exakt ⇔ sluten (i kontraherbart område)", s: "Vektorkalkyl" },
 
   /* ─── INTEGRALSATSER ────────────────────────────────────── */
@@ -769,7 +762,6 @@ const CARDS = [
   { c: "Integralsatser", q: "Vad heter formeln <span class='math'>∫<sub>Ω</sub> (∂f/∂x<sub>i</sub>) g dx = ∫<sub>∂Ω</sub> f g n<sub>i</sub> ds − ∫<sub>Ω</sub> f (∂g/∂x<sub>i</sub>) dx</span>?", a: "Partiell integration i flera variabler", s: "Integralsatser" },
   { c: "Integralsatser", q: "Vad heter formeln <span class='math'>∫<sub>Ω</sub> Δf · g dx = ∫<sub>∂Ω</sub> ∂<sub>n</sub>f · g ds − ∫<sub>Ω</sub> ∇f · ∇g dx</span>?", a: "Greens första identitet", s: "Integralsatser" },
   { c: "Integralsatser", q: "Vad kallas <span class='math'>∂<sub>n</sub>f = ∇f · n</span>?", a: "Normalderivatan", s: "Integralsatser" },
-  { c: "Integralsatser", q: "Vad heter den generaliserade satsen <span class='math'>∫<sub>Ω</sub> df = ∫<sub>∂Ω</sub> f</span>?", a: "Generaliserade Stokes sats", s: "Integralsatser" },
 
   /* ─── DISKRETISERING & MESH ─────────────────────────────── */
   { c: "Diskretisering & mesh", q: "Vad kallas det konvexa höljet av <span class='math'>k+1</span> affint oberoende punkter?", a: "k-simplex", s: "Diskretisering" },
@@ -817,7 +809,7 @@ const CARDS = [
 
   /* ─── KVADRATUR ─────────────────────────────────────────── */
   { c: "Kvadratur", q: "Vad kallas approximationen <span class='math'>∫<sub>Ω</sub> f dx ≈ ∑<sub>K</sub> ∑<sub>k</sub> w<sub>k</sub><sup>K</sup> f(x<sub>k</sub><sup>K</sup>)</span>?", a: "Kvadratur", s: "Kvadratur" },
-  { c: "Kvadratur", q: "Vad heter kvadraturen med en enda mittpunkt per cell (centroiden)?", a: "Centrumkvadratur", s: "Kvadratur" },
+  { c: "Kvadratur", q: "Vilken kvadratur är detta: \\( \\int_K f(x) dx \\approx |K| f(x_c) \\)?", a: "Centrumkvadratur", s: "Kvadratur" }
   { c: "Kvadratur", q: "Vad heter kvadraturen där hörnen är kvadraturpunkter med vikt <span class='math'>|K|/(n+1)</span>?", a: "Hörnkvadratur", s: "Kvadratur" },
   { c: "Kvadratur", q: "För vilken grad polynom är hörnkvadratur exakt?", a: "<span class='math'>r = 1</span> (linjära polynom)", s: "Kvadratur" },
   { c: "Kvadratur", q: "För vilken grad polynom är centrumkvadratur exakt?", a: "<span class='math'>r = 2</span> (kvadratisk konvergens i h)", s: "Kvadratur" },
@@ -868,8 +860,7 @@ const CARDS = [
   { c: "FEM-matriser", q: "Vilken struktur har styvhetsmatrisen typiskt?", a: "Gles (de flesta element är noll)", s: "FEM" },
   { c: "FEM-matriser", q: "Vad heter satsen: om <span class='math'>a</span> är symmetrisk och positivt definit, så är <span class='math'>u<sub>h</sub></span> bästa approximation i energinormen?", a: "Satsen om bästa approximation (FEM)", s: "FEM" },
   { c: "FEM-matriser", q: "Vad heter feluppskattningen <span class='math'>‖∇(u − u<sub>h</sub>)‖ ≤ C ‖h D²u‖</span>?", a: "Feluppskattning för finita element-lösningen", s: "FEM" },
-  { c: "FEM-matriser", q: "Vad heter operationen att förenkla massmatrisen till en diagonalmatris?", a: "Lumpning", s: "FEM" },
-
+  
   /* ─── EXTRA: ALGEBRA & VEKTORALGEBRA ────────────────────── */
   { c: "Vektoralgebra i ℝⁿ", q: "Vad heter <span class='math'>x · y = ∑<sub>i=1</sub><sup>n</sup> x<sub>i</sub> y<sub>i</sub></span>?", a: "Skalärprodukten", s: "Avsnitt 1.1" },
   { c: "Vektoralgebra i ℝⁿ", q: "Vad heter olikheten <span class='math'>‖x + y‖ ≤ ‖x‖ + ‖y‖</span> i ℝⁿ?", a: "Triangelolikheten", s: "Avsnitt 1.1" },
@@ -878,7 +869,6 @@ const CARDS = [
 
   /* ─── EXTRA: SLUTNA DIFFERENTIALFORMER & POTENTIALER ───── */
   { c: "Potential & exakta former", q: "Vad heter satsen som garanterar att rotationsfritt fält i enkelt sammanhängande område har en skalär potential?", a: "Poincarés lemma (en differentialform är exakt ⇔ sluten)", s: "Integralsatser" },
-  { c: "Potential & exakta former", q: "Hur löser man systemet <span class='math'>∂ϕ/∂x = F<sub>x</sub>, ∂ϕ/∂y = F<sub>y</sub>, ∂ϕ/∂z = F<sub>z</sub></span>?", a: "Integrera och jämför termer för att hitta skalär potential", s: "Kurvintegraler" },
   { c: "Potential & exakta former", q: "Vad krävs för att <span class='math'>F = ∇ϕ</span> ska existera?", a: "<span class='math'>F</span> rotationsfritt (<span class='math'>∇×F = 0</span>) och Ω enkelt sammanhängande", s: "Integralsatser" },
   { c: "Potential & exakta former", q: "Vad krävs för att <span class='math'>F = ∇×ψ</span> ska existera?", a: "<span class='math'>F</span> divergensfritt (<span class='math'>∇·F = 0</span>) och Ω kontraherbart", s: "Integralsatser" },
 
@@ -894,7 +884,6 @@ const CARDS = [
   { c: "Övrig teori", q: "Vad heter restriktionen <span class='math'>f<sub>h</sub>|<sub>K</sub> ∈ P<sub>r</sub>(K)</span> där varje cell har ett polynom av grad r?", a: "Styckvis polynom av grad r", s: "Diskretisering" },
   { c: "Övrig teori", q: "Vad kallas en mängd av <span class='math'>k+1</span> punkter <span class='math'>x<sub>0</sub>, …, x<sub>k</sub></span> där <span class='math'>x<sub>1</sub>−x<sub>0</sub>, …, x<sub>k</sub>−x<sub>0</sub></span> är linjärt oberoende?", a: "Affint oberoende", s: "Diskretisering" },
   { c: "Övrig teori", q: "Vad kallas en mängd <span class='math'>{∑ w<sub>i</sub> x<sub>i</sub> | ∑ w<sub>i</sub> = 1, w<sub>i</sub> ≥ 0}</span>?", a: "Konvexa kombinationer (= konvexa höljet)", s: "Diskretisering" },
-  { c: "Övrig teori", q: "När är en funktion Riemann-integrerbar?", a: "När övre och undre Riemann-summor sammanfaller", s: "Avsnitt 3" },
   { c: "Övrig teori", q: "Vilka egenskaper har dubbel-/trippelintegralen?", a: "Additiv, linjär, monoton, uppfyller triangelolikheten", s: "Avsnitt 3" },
   { c: "Övrig teori", q: "Vad heter ekvivalensen mellan stark och svag formulering?", a: "En två gånger kontinuerligt deriverbar lösning till svag form är lösning till stark form (och omvänt)", s: "FEM" },
   { c: "Övrig teori", q: "Vilken matristyp är massmatrisen <span class='math'>M</span>?", a: "Symmetrisk och positivt definit", s: "FEM" },
@@ -905,7 +894,6 @@ const CARDS = [
 
   /* ─── EXTRA: SPECIFIKA SATSER FRÅN FÖRELÄSNINGSANTECK. ──── */
   { c: "Specialsatser", q: "Vad heter satsen <span class='math'>(f<sup>−1</sup>)'(ȳ) = (f'(x̄))<sup>−1</sup></span>?", a: "Inversa funktionssatsen", s: "Funktionssatser" },
-  { c: "Specialsatser", q: "Vad heter Bilinjäritet i bilinjär form <span class='math'>a(αu + βv, w) = α·a(u,w) + β·a(v,w)</span>?", a: "Linjäritet i första argumentet", s: "FEM" },
   { c: "Specialsatser", q: "Vilka tre formler matchar gradienten i polära, cylindriska, sfäriska koordinater?", a: "Olika uttryck men alla via <span class='math'>∇f = ∑ (∂f/∂q<sub>i</sub>) e<sub>i</sub></span>", s: "Koordinatsystem" },
   { c: "Specialsatser", q: "Vad heter satsen som visar att kontinuerliga funktioner är integrerbara på kompakta mängder?", a: "Riemann-integrabilitet av kontinuerliga funktioner", s: "Avsnitt 3" },
   { c: "Specialsatser", q: "Vad är invers polära koordinatomvandling?", a: "<span class='math'>r = √(x² + y²), φ = arctan(y/x) + nπ</span>", s: "Koordinatsystem" },
@@ -914,8 +902,6 @@ const CARDS = [
 
   /* ─── EXTRA: BERÄKNINGSALGORITMER ────────────────────────── */
   { c: "Beräkningsalgoritmer", q: "I Newtons metod, vad löser man i varje steg?", a: "Linjärt system <span class='math'>f'(x<sub>k</sub>) h = −f(x<sub>k</sub>)</span>, sedan <span class='math'>x<sub>k+1</sub> = x<sub>k</sub> + h</span>", s: "Newtons metod" },
-  { c: "Beräkningsalgoritmer", q: "I FEM-assembleringen, vad är inre loopen för en triangel?", a: "Loopa över <span class='math'>i,j ∈ {1,2,3}</span>, addera <span class='math'>A<sub>ij</sub><sup>K</sup></span> till <span class='math'>A<sub>ι<sub>K</sub>(i),ι<sub>K</sub>(j)</sub></span>", s: "FEM" },
-  { c: "Beräkningsalgoritmer", q: "Hur sätter man Dirichlet-villkor i FEM efter assemblering?", a: "Radera raden, sätt diagonalen = 1, sätt motsvarande b-värde", s: "FEM" },
   { c: "Beräkningsalgoritmer", q: "Vilken är den totala styvhetsmatrisen som summa av elementstyvhetsmatriser?", a: "<span class='math'>A<sub>IJ</sub> = ∑<sub>K ∈ K<sub>IJ</sub></sub> A<sub>ij</sub><sup>K</sup></span>", s: "FEM" },
 
   /* ─── EXTRA: TYPER AV DERIVATOR (formelhäftet sista del) ──── */
@@ -933,10 +919,9 @@ const CARDS = [
   /* ─── EXTRA: KOMPLETTERING AV BEGREPP ──────────────────── */
   { c: "Kompletterande begrepp", q: "Vad är det generella optimeringsproblemet <span class='math'>x̄ = arg min<sub>x ∈ X</sub> f(x)</span>?", a: "Sök punkt i tillåtna mängden X som minimerar f", s: "Optimering" },
   { c: "Kompletterande begrepp", q: "Vad heter <span class='math'>f: ℝⁿ → ℝ</span> i ett optimeringsproblem?", a: "Målfunktion", s: "Optimering" },
-  { c: "Kompletterande begrepp", q: "Vilka villkor heter <span class='math'>∇f(x) + (g'(x))<sup>T</sup> λ = 0, g(x) = 0</span>?", a: "Optimalitetsvillkoren för Lagrange-multiplikatorer", s: "Optimering" },
+  { c: "Kompletterande begrepp", q: "Vilka villkor heter <span class='math'>∇f(x) + λ∇g(x) = 0, g(x) = 0</span>?", a: "Optimalitetsvillkoren för Lagrange-multiplikatorer", s: "Optimering" },
   { c: "Kompletterande begrepp", q: "Vad gäller om <span class='math'>P<sub>h</sub>: V → V<sub>h</sub></span> är en linjär operator?", a: "<span class='math'>P<sub>h</sub>(αf + βg) = α P<sub>h</sub>f + β P<sub>h</sub>g</span>", s: "Projektion" },
   { c: "Kompletterande begrepp", q: "Vad gäller geometriskt om <span class='math'>P<sub>h</sub>f</span>?", a: "Den är 'rakt under' f i underrummet V<sub>h</sub> (ortogonal projektion)", s: "Projektion" },
-  { c: "Kompletterande begrepp", q: "Vad är resttermen i Taylors sats av grad 1?", a: "<span class='math'>E<sub>1</sub>[f, x](h) = ½ h<sup>T</sup> f''(ξ) h ≤ ½ ‖h‖² max ‖f''‖<sub>F</sub></span>", s: "Avsnitt 1.6" },
   { c: "Kompletterande begrepp", q: "Vad är resttermen i Taylors sats av grad 2?", a: "<span class='math'>E<sub>2</sub>[f, x](h) = ⅙ f'''(ξ) · h · h · h ≤ ⅙ ‖h‖³ max ‖f'''‖<sub>F</sub></span>", s: "Avsnitt 1.6" },
   { c: "Kompletterande begrepp", q: "Vad heter en linjär operator <span class='math'>π<sub>h</sub>(αf + βg)</span>?", a: "<span class='math'>α π<sub>h</sub>f + β π<sub>h</sub>g</span> (linjäritet av interpolanten)", s: "Interpolation" }
 
