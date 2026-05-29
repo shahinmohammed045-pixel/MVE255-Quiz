@@ -177,14 +177,16 @@ window.MathJax = {
     <div class="card-actions" id="actionsHidden">
       <button class="action reveal" id="revealBtn">Visa svar <span class="kbd">Space</span></button>
       <button class="action skip" id="skipBtn">Hoppa över <span class="kbd">S</span></button>
+      <button class="action skip back-btn">Tillbaka <span class="kbd">B</span></button>
     </div>
     <div class="card-actions" id="actionsShown" hidden>
       <button class="action right" id="rightBtn">Rätt <span class="kbd">R</span></button>
       <button class="action wrong" id="wrongBtn">Fel <span class="kbd">F</span></button>
       <button class="action skip" id="nextBtn">Nästa <span class="kbd">N</span></button>
+      <button class="action skip back-btn">Tillbaka <span class="kbd">B</span></button>
     </div>
     <div class="hotkeys">
-      <span class="k">Space</span> visa svar &nbsp;·&nbsp; <span class="k">R</span> rätt &nbsp;·&nbsp; <span class="k">F</span> fel &nbsp;·&nbsp; <span class="k">N</span> nästa &nbsp;·&nbsp; <span class="k">S</span> hoppa över
+      <span class="k">Space</span> visa svar &nbsp;·&nbsp; <span class="k">R</span> rätt &nbsp;·&nbsp; <span class="k">F</span> fel &nbsp;·&nbsp; <span class="k">N</span> nästa &nbsp;·&nbsp; <span class="k">S</span> hoppa över &nbsp;·&nbsp; <span class="k">B</span> tillbaka
     </div>
   </div>
   <div class="card-wrap" id="finishedWrap" hidden>
@@ -200,7 +202,7 @@ window.MathJax = {
   <footer>
     Byggd för MVE455 / TMA976-stilen efter Anders Loggs format. <br>
     <span class="src">Källa: Shahins formelhäfte + Loggs IV.8.1-repetition + Flervariabel-anteckningar.</span><br>
-    <span class="src">⌨ Kortkommandon: Space · R · F · N · S</span>
+    <span class="src">⌨ Kortkommandon: Space · R · F · N · S · B</span>
   </footer>
 </div>
 <script>
@@ -472,6 +474,31 @@ let state = {
   queue: [], idx: 0, right: 0, wrong: 0, shown: false, history: {}, active: false
 };
 
+let backHistory = [];
+
+function snapshot() {
+  backHistory.push({
+    queue: state.queue.slice(),
+    idx: state.idx,
+    right: state.right,
+    wrong: state.wrong
+  });
+}
+
+function goBack() {
+  if (backHistory.length === 0) return;
+  const snap = backHistory.pop();
+  state.queue = snap.queue;
+  state.idx = snap.idx;
+  state.right = snap.right;
+  state.wrong = snap.wrong;
+  $('#finishedWrap').hidden = true;
+  $('#cardWrap').hidden = false;
+  state.active = true;
+  renderCard();
+  reveal();
+}
+
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -567,6 +594,7 @@ function buildQueue() {
 
 function startQuiz() {
   state.queue = buildQueue();
+  backHistory = [];
   if (state.queue.length === 0) { alert('Inga kort i den nuvarande filtreringen. Justera filter.'); return; }
   state.idx = 0; state.right = 0; state.wrong = 0; state.shown = false; state.active = true;
   $('#cardWrap').hidden = false;
@@ -602,8 +630,22 @@ function reveal() {
   $('#actionsHidden').hidden = true;
   $('#actionsShown').hidden = false;
 }
-function markRight() { if (!state.shown) reveal(); state.right += 1; next(); }
+
+function next(noSnap) {
+  if (!noSnap) snapshot();
+  state.idx += 1;
+  renderCard();
+}
+
+function markRight() {
+  snapshot();
+  if (!state.shown) reveal();
+  state.right += 1;
+  next(true);
+}
+
 function markWrong() {
+  snapshot();
   if (!state.shown) reveal();
   state.wrong += 1;
   if (state.repeatWrong) {
@@ -611,15 +653,17 @@ function markWrong() {
     const pos = Math.min(state.queue.length, state.idx + 5);
     state.queue.splice(pos, 0, card);
   }
-  next();
+  next(true);
 }
+
 function skip() {
+  snapshot();
   const card = state.queue.splice(state.idx, 1)[0];
   state.queue.push(card);
   if (state.idx >= state.queue.length) state.idx = state.queue.length - 1;
   renderCard();
 }
-function next() { state.idx += 1; renderCard(); }
+
 function finishQuiz() {
   $('#cardWrap').hidden = true;
   $('#finishedWrap').hidden = false;
@@ -627,6 +671,7 @@ function finishQuiz() {
   $('#finalTotal').textContent = state.right + state.wrong;
   state.active = false;
 }
+
 function resetHistory() {
   if (!confirm('Nollställ all historik och inställningar?')) return;
   localStorage.removeItem(STORAGE_KEY);
@@ -658,6 +703,8 @@ $('#backHomeBtn').addEventListener('click', () => { $('#finishedWrap').hidden = 
 $('#catAll').addEventListener('click', () => { state.selectedCats = null; saveState(); renderCatFilter(); });
 $('#catNone').addEventListener('click', () => { state.selectedCats = []; saveState(); renderCatFilter(); });
 
+$$('.back-btn').forEach(b => b.addEventListener('click', goBack));
+
 document.addEventListener('keydown', (e) => {
   if (!state.active) return;
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -667,6 +714,7 @@ document.addEventListener('keydown', (e) => {
   else if (k === 'f') { if (state.shown) markWrong(); }
   else if (k === 'n') { next(); }
   else if (k === 's') { skip(); }
+  else if (k === 'b') { goBack(); }
 });
 
 const total = CARDS.length;
