@@ -307,7 +307,6 @@ const CARDS = [
   { c: "Kurvor", q: "Vad kallas \\(\\hat{T}(t) = r'(t)/\\|r'(t)\\|\\)?", a: "Enhetstangentvektor", s: "Kurvor" },
   { c: "Kurvor", q: "Vad kallas en kurva som har en tangentvektor i varje punkt?", a: "Reguljär kurva", s: "Kurvor" },
   { c: "Kurvor", q: "Vad heter \\(v(t) = r'(t)\\)?", a: "Hastighet längs kurvan", s: "Kurvor" },
-  { c: "Kurvor", q: "Vad heter \\(a(t) = r''(t)\\)?", a: "Acceleration", s: "Kurvor" },
   { c: "Kurvintegraler", q: "Vad heter \\(\\int_{C} f ds = \\int_{a}^{b} f(r(t))\\|r'(t)\\| dt\\)?", a: "Kurvintegral av skalärfält", s: "Kurvintegraler" },
   { c: "Kurvintegraler", q: "Vad kallas \\(ds = \\|r'(t)\\| dt\\)?", a: "Båglängdselement", s: "Kurvintegraler" },
   { c: "Kurvintegraler", q: "Vad heter \\(|C| = \\int_{C} ds = \\int_{a}^{b} \\|r'(t)\\| dt\\)?", a: "Kurvlängd", s: "Kurvintegraler" },
@@ -449,9 +448,7 @@ const CARDS = [
   { c: "Specialsatser", q: "Vad är invers sfärisk koordinatomvandling?", a: "\\(r = \\sqrt{x^2 + y^2 + z^2}, \\theta  = arccos(z/r), \\varphi  = arctan(y/x)\\)", s: "Koordinatsystem" },
   { c: "Differentialoperatorer", q: "Vilka är de fyra typer av derivator i flervariabelanalys?", a: "\\(f'\\) Jacobi-matris, \\(\\nabla f\\) gradient, \\(\\nabla \\times F\\) rotation, \\(\\nabla \\cdot F\\) divergens", s: "Vektorkalkyl" },
   { c: "Differentialoperatorer", q: "Vad blir \\(\\nabla \\times F\\) i komponentform i ℝ³?", a: "\\((\\partial F_{z}/\\partial y - \\partial F_{y}/\\partial z, \\partial F_{x}/\\partial z - \\partial F_{z}/\\partial x, \\partial F_{y}/\\partial x - \\partial F_{x}/\\partial y)\\)", s: "Vektorkalkyl" },
-  { c: "Differentialoperatorer", q: "Vilken egenskap har gradient, rotation och divergens som operatorer?", a: "Linjära", s: "Vektorkalkyl" },
   { c: "Differentialoperatorer", q: "Vilken ordning är nabla-operatorn?", a: "Första ordningens deriveringsoperator", s: "Vektorkalkyl" },
-  { c: "Differentialoperatorer", q: "Vilka är andra ordningens differentialoperatorer?", a: "\\(\\nabla \\times (\\nabla f), \\nabla \\cdot (\\nabla \\times F), \\Delta f, \\nabla \\times (\\nabla \\times F), \\nabla (\\nabla \\cdot F)\\)", s: "Vektorkalkyl" },
   { c: "Tangenter & gradienter", q: "Hur skrivs Newtons metod-iterationen för optimering?", a: "\\(x_{k+1} = x_{k} - (f''(x_{k}))^{-1} \\nabla f(x_{k})\\)", s: "Optimering" },
   { c: "Tangenter & gradienter", q: "Vilka två tangentvektorer till en parametriserad yta?", a: "\\(r'_{u} = \\partial r/\\partial u\\) och \\(r'_{v} = \\partial r/\\partial v\\)", s: "Ytor" },
   { c: "Tangenter & gradienter", q: "Vad heter \\(r'_{u} \\times  r'_{v} = N\\)?", a: "Normalvektorn till ytan", s: "Ytor" },
@@ -459,9 +456,7 @@ const CARDS = [
   { c: "Kompletterande begrepp", q: "Vad heter \\(f: \\mathbb{R}^n \\to  \\mathbb{R}\\) i ett optimeringsproblem?", a: "Målfunktion", s: "Optimering" },
   { c: "Kompletterande begrepp", q: "Vilka villkor heter \\(\\nabla f(x) + \\lambda \\nabla g(x) = 0, g(x) = 0\\)?", a: "Optimalitetsvillkoren för Lagrange-multiplikatorer", s: "Optimering" },
   { c: "Kompletterande begrepp", q: "Vad gäller om \\(P_{h}: V \\to  V_{h}\\) är en linjär operator?", a: "\\(P_{h}(\\alpha f + \\beta g) = \\alpha  P_{h}f + \\beta  P_{h}g\\)", s: "Projektion" },
-  { c: "Kompletterande begrepp", q: "Vad gäller geometriskt om \\(P_{h}f\\)?", a: "Den är 'rakt under' f i underrummet V<sub>h</sub> (ortogonal projektion)", s: "Projektion" },
-  { c: "Kompletterande begrepp", q: "Vad är resttermen i Taylors sats av grad 2?", a: "\\(E_{2}[f, x](h) = \\tfrac{1}{6} f'''(\\xi ) \\cdot  h \\cdot  h \\cdot  h \\leq  \\tfrac{1}{6} \\|h\\|^3 max \\|f'''\\|_{F}\\)", s: "Avsnitt 1.6" },
-  { c: "Kompletterande begrepp", q: "Vad heter en linjär operator \\(\\pi_{h}(\\alpha f + \\beta g)\\)?", a: "\\(\\alpha  \\pi_{h}f + \\beta  \\pi_{h}g\\) (linjäritet av interpolanten)", s: "Interpolation" }
+  { c: "Kompletterande begrepp", q: "Vad gäller geometriskt om \\(P_{h}f\\)?", a: "Den är 'rakt under' f i underrummet V<sub>h</sub> (ortogonal projektion)", s: "Projektion" }
 ];
 
 const $ = (sel) => document.querySelector(sel);
